@@ -45,8 +45,9 @@
 
         <!-- 새 회의 만들기 -->
         <div class="create-meeting">
-          <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
+          <a id="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
         </div>
+
 
         <div class="meeting-item">
           {% for key, value in session_data.items %} {{ value }} {% endfor %}
