@@ -6,9 +6,11 @@ from django.contrib import messages
 
 
 def index(request):
-
     return render(request, 'main.html')
 
 
 def login_view(request):
     return render(request, 'login.html')
+
+def recording_view(request):
+    return render(request, 'recording.html')

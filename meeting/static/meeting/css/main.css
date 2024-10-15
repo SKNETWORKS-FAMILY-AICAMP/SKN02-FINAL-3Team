@@ -1,0 +1,55 @@
+body {
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 50px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .header button {
+        background-color: #e7f1ff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .meeting-list {
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+      .meeting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+      .meeting-item:last-child {
+        border-bottom: none;
+      }
+      .meeting-item .title {
+        font-weight: bold;
+      }
+      .meeting-item .date {
+        color: #6c757d;
+      }
+      .create-meeting {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #e7f1ff;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        cursor: pointer;
+      }
+      .create-meeting:hover {
+        background-color: #d0e4ff;
+      }
