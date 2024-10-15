@@ -26,6 +26,7 @@ RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 
 @csrf_exempt
 def save_recording_view(request):
+    print(request)
     if request.method == 'POST' and 'audio' in request.FILES:
         audio_file = request.FILES['audio']
 
@@ -33,5 +34,10 @@ def save_recording_view(request):
         if not os.path.exists(RECORD_DIR):
             os.makedirs(RECORD_DIR)
 
+        # 파일 저장
         file_path = os.path.join(RECORD_DIR, audio_file.name)
+        with open(file_path, 'wb') as f:
+            for chunk in audio_file.chunks():
+                f.write(chunk)
+
     return render(request, 'recording2.html')

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Listening Page</title>
+
     <link href="{% static 'meeting/bootstrap/bootstrap.css' %}" rel="stylesheet" media="screen">
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
@@ -38,22 +39,33 @@
                   };
 
                   mediaRecorder.onstop = async () => {
-                      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                       const formData = new FormData();
-                      formData.append('audio', audioBlob, 'recording.webm');
+                      formData.append('audio', audioBlob, 'recording.wav'); //이름 수정 --> 회의 아이디로
 
-                      // Django 뷰로 전송하기
-                      await fetch('/recording/save/', {
-                          method: 'POST',
-                          body: formData,
-                          headers: {
-                              'X-CSRFToken': '{{ csrf_token }}'  // CSRF 토큰 설정 필요
+                      // CSRF 토큰 가져오기
+                      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                      try {
+                          // Django 뷰로 전송하기
+                          const response = await fetch('/recording/save/', {
+                              method: 'POST',
+                              body: formData,
+                              headers: {
+                                  'X-CSRFToken': csrfToken
+                              }
+                          });
+                          if (response.ok) {
+                              console.log('녹음 파일이 성공적으로 저장되었습니다.');
+                              // 녹음 파일을 전송한 후 다음 페이지로 이동
+                              window.location.href ="{% url 'save_recording' %}";
+                          } else {
+                              console.error('녹음 파일 저장에 실패했습니다:', response.statusText);
                           }
-                      });
+                      } catch (fetchError) {
+                          console.error('녹음 파일 전송 중 오류가 발생했습니다:', fetchError);
+                      }
                       audioChunks = [];
-
-                      // 녹음 파일을 전송한 후 다음 페이지로 이동
-                      window.location.href = "{% url 'save_recording' %}";
                   };
 
                   // 녹음 시작
@@ -70,6 +82,8 @@
               }
           }
     </script>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
 
     <div class="greeting">미팅브릿지님, 안녕하세요!</div>
 
