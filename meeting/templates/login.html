@@ -1,56 +1,97 @@
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Meeting Bridge</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <style>
       body {
-        font-family: "Roboto", sans-serif;
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        background-color: white;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        padding: 0;
+      }
+      .left-panel {
+        background: linear-gradient(to bottom right, #e0f7fa, #b3e5fc);
+        padding: 40px;
+        color: #333;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .right-panel {
+        padding: 40px;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .logo {
+        margin-bottom: 20px;
+      }
+      .btn-google {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .btn-google img {
+        width: 20px;
+        margin-right: 10px;
       }
     </style>
   </head>
-  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      {% if messages %}
-      <div class="mb-4">
-        {% for message in messages %}
-        <div class="text-red-500">{{ message }}</div>
-        {% endfor %}
+  <body>
+    <div class="container">
+      <div class="left-panel">
+        <h1>AI 회의 어시스턴트<br /><strong>미팅브릿지</strong></h1>
+        <p>회의록 생성과 회의 요약을<br /><strong>한 번에, 간편하게!</strong></p>
+        <p>지금 구글 아이디로 시작해보세요.</p>
       </div>
-      {% endif %}
-      <form method="POST" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="mb-6">
-          <input
-            type="text"
-            name="id"
-            placeholder="ID"
-            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+      <div class="right-panel">
+        <div class="logo">
+          <img src="https://via.placeholder.com/150" alt="Logo" />
+        </div>
+        <h2>Meeting Bridge</h2>
+        <p>로그인</p>
+        <a href="{% provider_login_url 'google' %}" class="btn-google">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+            alt="Google Logo"
           />
-        </div>
-        <div class="mb-6">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div class="flex justify-end">
-          <button
-            type="submit"
-            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            Login
-          </button>
-        </div>
-      </form>
+          Continue with Google
+        </a>
+      </div>
     </div>
   </body>
 </html>
