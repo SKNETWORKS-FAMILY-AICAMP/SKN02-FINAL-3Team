@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('login/', views.login_view),
     path('main/', views.index, name='main'),
-    path('recording/', views.recording_view, name='recording')# index 뷰가 main.html을 렌더링합니다.
+    path('recording/', views.recording_view, name='recording'), # index 뷰가 main.html을 렌더링합니다.
+    path('recording/save/', views.save_recording_view, name='save_recording'),
 
 ]
+
