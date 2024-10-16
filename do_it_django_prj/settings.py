@@ -73,10 +73,9 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
 # 구글 OAuth2 설정
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "google_client_id"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "google_client_secret"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
