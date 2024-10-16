@@ -1,7 +1,9 @@
 from django.urls import path, include
+from django.shortcuts import redirect
 from . import views
 
 urlpatterns = [
+    path('', lambda request: redirect('login/')),
     path('login/', views.login_view),
     path('main/', views.index, name='main'),
     # index 뷰가 main.html을 렌더링합니다.
