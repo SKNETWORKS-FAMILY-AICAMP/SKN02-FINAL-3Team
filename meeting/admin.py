@@ -1,3 +1,8 @@
 from django.contrib import admin
-from django import forms
-from django.contrib.auth.hashers import make_password
+from .models import Meeting, Minutes, Participant, Confirmation, Notification
+
+admin.site.register(Meeting)
+admin.site.register(Minutes)
+admin.site.register(Participant)
+admin.site.register(Confirmation)
+admin.site.register(Notification)
