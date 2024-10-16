@@ -7,6 +7,6 @@ urlpatterns = [
     # index 뷰가 main.html을 렌더링합니다.
     path('recording/', views.recording_view, name='recording'),
     path('recording/save/', views.save_recording_view, name='save_recording'),
-    path('meeting/<int:meeting_id>/summary/', views.meeting_summary,
-         name='meeting_summary'),  # 추가된 URL 패턴
+    path('meeting_summary/<int:meeting_id>/',
+         views.meeting_summary, name='meeting_summary'),
 ]

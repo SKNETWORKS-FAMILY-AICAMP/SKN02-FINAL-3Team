@@ -52,7 +52,7 @@
             <h2>Meeting List</h2>
             <div id="list-items">
                 {% for meeting in meetings %}
-                    <div class="list-item" onclick="toggleDetails('{{ meeting.title|escapejs }}', '{{ meeting.started_at|date:"Y-m-d H:i"|escapejs }}', '{{ meeting.host|escapejs }}')">
+                    <div class="list-item" onclick="toggleDetails('{{ meeting.id }}')">
                         <span class="list-item-title">{{ meeting.title }}</span>
                         <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }} {{ meeting.host }}</span>
                     </div>
@@ -71,26 +71,31 @@
     <script>
       let currentItem = null;
 
-      function toggleDetails(title, startedAt, host) {
-            const listContainer = document.getElementById('list-container');
-            const detailsContainer = document.getElementById('details');
-            const detailsTitle = document.getElementById('details-title');
-            const detailsContent = document.getElementById('details-content');
+      function toggleDetails(meeting_id) {
+        const listContainer = document.getElementById('list-container');
+        const detailsContainer = document.getElementById('details');
+        const detailsTitle = document.getElementById('details-title');
+        const detailsContent = document.getElementById('details-content');
+        const detailsInfo = document.getElementById('details-info');
 
-            if (currentItem === title) {
-                // Hide the details if the same item is clicked again
-                detailsContainer.classList.remove('open');
-                listContainer.classList.remove('split-view');
-                currentItem = null;
-            } else {
-                // Show the details of the selected item
-                detailsTitle.innerText = title;
-                detailsContent.innerText = `Title: ${title}\nStarted at: ${startedAt}\nHost: ${host}`;
-                detailsContainer.classList.add('open');
-                listContainer.classList.add('split-view');
-                currentItem = title;
-            }
+        if (currentItem === meeting_id) {
+          // Hide the details if the same item is clicked again
+          detailsContainer.classList.remove('open');
+          listContainer.classList.remove('split-view');
+          currentItem = null;
+        } else {
+          // Fetch the meeting details from the server
+          fetch(`/meeting_summary/${meeting_id}/`)
+            .then(response => response.text())
+            .then(html => {
+              // Show the details of the selected item
+              detailsContent.innerHTML = html;
+              detailsContainer.classList.add('open');
+              listContainer.classList.add('split-view');
+              currentItem = meeting_id;
+            });
         }
+      }
 
 
         $("#search-title").click(function () {

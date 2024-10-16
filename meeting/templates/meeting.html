@@ -69,8 +69,9 @@
           {{participant}} {% endfor %}
         </p>
         <p>
-          <strong>확인자</strong><br />{% for participant in Participants %} {% if
-          participant.ischecker == 'True' %} {{ participant }} {% endfor %}
+          <strong>확인자</strong><br />
+          {% for participant in Participants %} {% if participant.is_checker %}
+          {{participant}} {% endif %} {% endfor %}
         </p>
 
         <p><strong>회의 요약</strong></p>
