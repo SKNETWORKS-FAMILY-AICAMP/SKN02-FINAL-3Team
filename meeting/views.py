@@ -16,10 +16,11 @@ def login_view(request):
 
 def index(request):
     if request.user.is_authenticated:
-        participant_meetings = Participant.objects.filter(
-            user=request.user).values_list('meeting', flat=True)
-        meetings = Meeting.objects.filter(
-            id__in=participant_meetings).order_by('-started_at')[:15]
+        meetings = Meeting.objects.all().order_by('-started_at')[:15]
+        # participant_meetings = Participant.objects.filter(
+        #     user=request.user).values_list('meeting', flat=True)
+        # meetings = Meeting.objects.filter(
+        #     id__in=participant_meetings).order_by('-started_at')[:15]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
     else:
         return redirect('login')
@@ -43,10 +44,12 @@ RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 def save_audio(request):
     if request.method == 'POST':
         audio_file = request.FILES['audio']
-        meeting_name = request.POST.get('meeting_name')  # 기본 이름 설정
+        meetingName = request.POST.get('meetingName')
+        user_id = request.user.email
+
 
         folder = 'record'  # 저장할 폴더
-        filename = f"{meeting_name}.wav"
+        filename = f"{meetingName}.wav"
 
         # 해당 폴더가 없다면 생성
         if not os.path.exists(folder):
@@ -59,6 +62,10 @@ def save_audio(request):
         with open(file_path, 'wb+') as destination:
             for chunk in audio_file.chunks():
                 destination.write(chunk)
+
+        # db 저장
+        meeting = Meeting(title=meetingName, host_id=request.user.id).save()
+        print(meeting)
 
         return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 

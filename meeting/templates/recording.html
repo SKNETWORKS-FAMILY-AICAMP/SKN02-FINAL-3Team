@@ -137,6 +137,7 @@
         const formData = new FormData();
         const meetingName = document.getElementById('title_input_element').value;
         formData.append('meetingName', meetingName)
+
         // 참석자 이메일 수집
         const emailButtons = document.querySelectorAll('#email-buttons button');
         emailButtons.forEach(button => {
@@ -147,7 +148,7 @@
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         try {
-            const response = await fetch('{% url 'save_audio' %}', { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
+            const response = await fetch("{% url 'save_audio' %}", { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
                 method: 'POST',
                 body: formData,
                 headers: {
