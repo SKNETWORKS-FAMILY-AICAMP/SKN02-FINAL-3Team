@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
-import os
 from django.conf import settings
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Meeting, Participant
+from django.http import JsonResponse
+import os
 
 # Create your views here.
 
@@ -41,19 +40,27 @@ RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 
 
 @csrf_exempt
-def save_recording_view(request):
-    print(request)
-    if request.method == 'POST' and 'audio' in request.FILES:
+def save_audio(request):
+    if request.method == 'POST':
         audio_file = request.FILES['audio']
+        meeting_name = request.POST.get('meeting_name')  # 기본 이름 설정
 
-        # 파일 저장 경로 설정
-        if not os.path.exists(RECORD_DIR):
-            os.makedirs(RECORD_DIR)
+        folder = 'record'  # 저장할 폴더
+        filename = f"{meeting_name}.wav"
+
+        # 해당 폴더가 없다면 생성
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        # 파일 경로 설정
+        file_path = os.path.join(folder, filename)
 
         # 파일 저장
-        file_path = os.path.join(RECORD_DIR, audio_file.name)
-        with open(file_path, 'wb') as f:
+        with open(file_path, 'wb+') as destination:
             for chunk in audio_file.chunks():
-                f.write(chunk)
+                destination.write(chunk)
 
-    return render(request, 'recording2.html')
+        return JsonResponse({'message': 'File uploaded successfully'}, status=200)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
