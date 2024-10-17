@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{% static 'meeting/jquery/jquery.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'meeting/jquery/jquery.min.js' %}" media="screen">
     <link rel="stylesheet" href="{% static 'meeting/css/main.css' %}" media="screen">
   </head>
   <body>
@@ -47,6 +47,7 @@
           <div class="create-meeting">
             <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
           </div>
+        </div>
 
         <div class="list-container" id="list-container">
             <h2>Meeting List</h2>
