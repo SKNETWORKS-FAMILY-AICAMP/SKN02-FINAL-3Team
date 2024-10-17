@@ -4,6 +4,14 @@ body {
     text-align: center;
     padding-top: 100px;
 }
+.main-container {
+    border-radius: 15px; /* 모서리를 둥글게 만듭니다 */
+    background-color: #ffffff; /* 배경색 설정 */
+    padding: 20px; /* 내부 여백 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    max-width: 600px; /* 최대 너비 설정 */
+    margin:auto;
+}
 .wave {
     display: inline-block;
     margin-right: 10px;
@@ -14,7 +22,6 @@ body {
 }
 .listening-container {
     display: flex;
-    align-items: center;
     align-items: center;
     justify-content: center;
 }
