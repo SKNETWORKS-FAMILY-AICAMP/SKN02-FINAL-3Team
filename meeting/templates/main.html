@@ -47,19 +47,20 @@
           <div class="create-meeting">
             <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
           </div>
-        </div>
 
-        <div class="list-container" id="list-container">
-            <h2>Meeting List</h2>
-            <div id="list-items">
-                {% for meeting in meetings %}
-                    <div class="list-item" onclick="toggleDetails('{{ meeting.id }}')">
-                        <span class="list-item-title">{{ meeting.title }}</span>
-<!--                        <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }} {{ meeting.host }}</span>-->
-                    </div>
-                {% endfor %}
+
+            <div class="list-container" id="list-container">
+
+                <div id="list-items">
+                    {% for meeting in meetings %}
+                        <div class="list-item" onclick="toggleDetails('{{ meeting.id }}')">
+                            <span class="list-item-title">{{ meeting.title }}</span>
+    <!--                        <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }} {{ meeting.host }}</span>-->
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+          </div>
 
         <div class="details-container" id="details">
             <h2 id="details-title">요약본</h2>
@@ -67,6 +68,10 @@
         </div>
     </div>
 
+
+     <footer class="py-3 bg-dark">
+            <p class="m-0 text-sm-center text-white">Copyright &copy; Mind Bridge</p>
+     </footer>
 
 
     <script>
