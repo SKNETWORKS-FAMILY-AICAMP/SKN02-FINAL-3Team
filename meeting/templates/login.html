@@ -1,5 +1,6 @@
 {% load socialaccount %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -74,19 +75,22 @@
   <body>
     <div class="container">
       <div class="left-panel">
-        <h1>AI 회의 어시스턴트<br /><strong>미팅브릿지</strong></h1>
-        <p>회의록 생성과 회의 요약을<br /><strong>한 번에, 간편하게!</strong></p>
-        <p>지금 구글 아이디로 시작해보세요.</p>
+        <div class="m-md-3">
+          <h5>AI 회의 어시스턴트</h5>
+          <h1><strong>미팅브릿지</strong></h1>
+          <br>
+          <br>
+          <h4>회의록 생성과 회의 요약을<br /><strong>한 번에, 간편하게!</strong></h4>
+          <h4>지금 구글 아이디로 시작해보세요.</h4>
+        </div>
       </div>
       <div class="right-panel">
         <div class="logo">
-          <img src="https://via.placeholder.com/150" alt="Logo" />
+          <img src="{% static 'images/logo.png' %}" width="50%" alt="" />
         </div>
-        <h2>Meeting Bridge</h2>
-        <p>로그인</p>
         <a href="{% provider_login_url 'google' %}" class="btn-google">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+            src="{% static 'images/google_logo.png' %}"
             alt="Google Logo"
           />
           Continue with Google

@@ -11,56 +11,61 @@
     <link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}" media="screen">
 </head>
 <body>
+<div class="main-container">
+    <div class="listening-container">
+        <img src="{% static 'images/listening.gif' %}" alt="" height="70px">
+        <div class="listening-text">&nbsp;&nbsp;Listening...</div>
+    </div>
 
-<div class="listening-container">
-    <img src="{% static 'images/listening.gif' %}" alt="" height="70px">
-    <div class="listening-text">&nbsp;&nbsp;Listening...</div>
-</div>
+    <button id="end-button" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
 
-<button id="end-button" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
-
-<!-- 모달 -->
-<div class="modal fade" id="finishModal" tabindex="-1" aria-labelledby="finishModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="finishModalLabel">회의 종료</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                    <div class="mb-3">
-                        <label for="title_input_element" class="form-label">제목:</label>
-                        <input type="text" class="form-control" id="title_input_element" name="title_input_element" placeholder="제목 입력">
-                    </div>
-                    <div class="mb-3">
-                        <label for="attendent_input_element" class="form-label">참석자:</label>
-                        <div id="attendent-input-container">
-                            <input type="text" class="form-control" id="attendent_input_element" placeholder="이메일 입력 후 쉼표로 구분">
-                            <div id="email-buttons" class="mt-2"></div>
+    <!-- 모달 -->
+    <div class="modal fade" id="finishModal" tabindex="-1" aria-labelledby="finishModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="finishModalLabel">회의 종료</h3>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                        <div class="mb-3">
+                            <label for="title_input_element" class="form-label">제목:</label>
+                            <input type="text" class="form-control" id="title_input_element" name="title_input_element" placeholder="제목 입력">
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="checker_input_element" class="form-label">확인자:</label>
-                        <input type="text" class="form-control" id="checker_input_element" placeholder="닉네임 입력">
-                    </div>
-                    <p class="modal-text">
-                        회의를 저장하시겠습니까?<br> 저장하지 않고 나가면 회의가 저장되지 않습니다.
-                    </p>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">예</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니요</button>
+                        <div class="mb-3">
+                            <label for="attendent_input_element" class="form-label">참석자:</label>
+                            <div id="attendent-input-container">
+                                <input type="text" class="form-control" id="attendent_input_element" placeholder="이메일 입력 후 쉼표로 구분">
+                                <div id="email-buttons" class="mt-2"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="checker_input_element" class="form-label">확인자:</label>
+                            <input type="text" class="form-control" id="checker_input_element" placeholder="닉네임 입력">
+                        </div>
+                        <p class="modal-text">
+                            회의를 저장하시겠습니까?<br> 저장하지 않고 나가면 회의가 저장되지 않습니다.
+                        </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">예</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-button">아니요</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 <script src="{% static 'meeting/bootstrap/bootstrap.bundle.js' %}"></script>
 
 <script>
+    <!--모달에서 아니오을 누르면 main화면으로 넘어가는 코드 구현-->
+    document.getElementById('close-button').addEventListener('click', function() {
+        // 원하는 URL로 이동
+        window.location.href = '{% url "main" %}'; // 여기에 원하는 링크를 입력
+    });
+
     let mediaRecorder;
     let audioChunks = [];
     let audioBlob; // 전역에서 사용하기 위해 미리 선언
@@ -132,6 +137,7 @@
         const formData = new FormData();
         const meetingName = document.getElementById('title_input_element').value;
         formData.append('meetingName', meetingName)
+
         // 참석자 이메일 수집
         const emailButtons = document.querySelectorAll('#email-buttons button');
         emailButtons.forEach(button => {
@@ -142,13 +148,14 @@
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         try {
-            const response = await fetch('{% url 'save_audio' %}', { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
+            const response = await fetch("{% url 'save_audio' %}", { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
                 method: 'POST',
                 body: formData,
                 headers: {
                     'X-CSRFToken': csrfToken
                 }
             });
+
             if (response.ok) {
                 console.log('녹음 파일이 성공적으로 저장되었습니다.');
                 window.location.href = "{% url 'main' %}";
