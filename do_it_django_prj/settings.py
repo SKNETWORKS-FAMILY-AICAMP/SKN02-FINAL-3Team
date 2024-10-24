@@ -15,7 +15,7 @@ import os
 from dotenv import load_dotenv
 
 # .env 파일 로드
-load_dotenv('../.env')
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -115,11 +115,17 @@ WSGI_APPLICATION = 'do_it_django_prj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # MySQL 데이터베이스 엔진 사용
+        'NAME': os.getenv('DB_NAME'),  # 데이터베이스 이름
+        'USER': os.getenv('DB_ID'),  # 데이터베이스 사용자
+        'PASSWORD': os.getenv('DB_PW'),  # 데이터베이스 비밀번호
+        'HOST': os.getenv('DB_HOST'),  # 데이터베이스 호스트
+        'PORT': os.getenv('DB_PORT'),  # 데이터베이스 포트
+        'OPTIONS' : {
+            'ssl' : {'ca' : str(os.path.join(BASE_DIR / 'etc',' ssl', 'certs', 'global-bundle.pem'))},
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -161,3 +167,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
