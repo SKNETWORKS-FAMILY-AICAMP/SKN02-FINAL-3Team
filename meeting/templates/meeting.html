@@ -53,8 +53,7 @@
       <div class="card-header d-flex justify-content-between">
         <span>{{ meeting.title }}</span>
         <span>
-          {{ meeting.started_at|date:"Y-m-d H:i" }} 작성자 {{ meeting.host }}</span
-        >
+          {{ meeting.started_at|date:"Y-m-d H:i" }} 작성자 : {{ meeting.host }}</span>
       </div>
       <div class="card-body">
         <p>

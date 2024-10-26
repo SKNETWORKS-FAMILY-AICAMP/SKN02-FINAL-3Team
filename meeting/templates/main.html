@@ -1,28 +1,15 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load static %}
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Split View Meeting List</title>
-    <link href="{% static 'meeting/bootstrap/bootstrap.css' %}" rel="stylesheet" media="screen">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'meeting/jquery/jquery.min.js' %}" media="screen">
+
+{% block title %}- Main{% endblock %}
+
+{% block css %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'meeting/css/main.css' %}" media="screen">
-  </head>
-  <body>
-    <div class="main-container">
-        <div class="header">
-          <button>알림함</button>
-          {% if user.is_authenticated %}
-          <div>{{ user.last_name }}{{ user.first_name }}님, 안녕하세요!</div>
-          {% else %}
-          <a href="{% url 'login' %}">로그인</a>
-          {% endif %}
-        </div>
+{% endblock %}
+
+
+{% block contents %}
         <div class="meeting-list">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="dropdown">
@@ -30,18 +17,18 @@
                 class="btn btn-light dropdown-toggle"
                 type="button"
                 id="dropdownMenuButton"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
                 제목
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#" id="search-title">제목</a>
-                <a class="dropdown-item" href="#" id="search-author">작성자</a>
-                <a class="dropdown-item" href="#" id="search-date">날짜</a>
-                <a class="dropdown-item" href="#" id="search-summary">요약문</a>
-              </div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" id="search-title">제목</a>
+                    <a class="dropdown-item" href="#" id="search-author">작성자</a>
+                    <a class="dropdown-item" href="#" id="search-date">날짜</a>
+                    <a class="dropdown-item" href="#" id="search-summary">요약문</a>
+                  </div>
             </div>
           </div>
           <div class="create-meeting">
@@ -61,18 +48,15 @@
                 </div>
             </div>
             <div class="details-container" id="details">
-                <h2 id="details-title">요약본</h2>
+                <h3 id="details-title">{{ meeting.title }}</h3>
                 <p id="details-content">Select an item from the list to see more details here.</p>
             </div>
           </div>
     </div>
 
+{% endblock %}
 
-     <footer class="py-3 bg-dark">
-            <p class="m-0 text-sm-center text-white">Copyright &copy; Mind Bridge</p>
-     </footer>
-
-
+{% block script %}
     <script>
       let currentItem = null;
 
@@ -144,5 +128,4 @@
         });
 
     </script>
-  </body>
-</html>
+{% endblock %}

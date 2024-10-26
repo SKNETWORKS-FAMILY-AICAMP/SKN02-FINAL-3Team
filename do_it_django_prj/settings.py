@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import pymysql
+
 
 # .env 파일 로드
 load_dotenv()
@@ -28,6 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*)(g=kg1xd1mlt#qnb+hwwng)!gh3+_*#mw(woz_^b8d^487uy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Debug가 True일 경우 웹 정보가 그대로 화면에 출력됨 --> False로 변경
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -91,10 +94,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'do_it_django_prj.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'meeting', 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,6 +117,7 @@ WSGI_APPLICATION = 'do_it_django_prj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # MySQL 데이터베이스 엔진 사용
@@ -122,7 +127,7 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST'),  # 데이터베이스 호스트
         'PORT': os.getenv('DB_PORT'),  # 데이터베이스 포트
         'OPTIONS' : {
-            'ssl' : {'ca' : str(os.path.join(BASE_DIR / 'etc',' ssl', 'certs', 'global-bundle.pem'))},
+            'ssl' : {'ca' : str(BASE_DIR/'etc/ssl/certs/global-bundle.pem')},
         }
     }
 }
