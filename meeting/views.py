@@ -10,6 +10,7 @@ def login_view(request):
     return render(request, 'login.html')
 
 def index(request):
+    print(request)
     if request.user.is_authenticated:
         meetings = Meeting.objects.all().order_by('-started_at')[:15]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
@@ -28,7 +29,7 @@ def recording_view(request):
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 
 @csrf_exempt
-def save_audio(request, meeting_id):
+def save_audio(request):
     if request.method == 'POST':
         # 빈 Meeting 객체를 생성하여 저장하고 id를 자동 생성
         meeting = Meeting.objects.create()  # 기본 값으로 빈 Meeting 객체 생성
@@ -58,9 +59,8 @@ def save_audio(request, meeting_id):
         attendees = request.POST.getlist('attendees[]') # 리스트로 받음
         checkers = request.POST.getlist('checkers[]')
         for attendee in attendees:
-            for attendee in attendees:
-                is_checker = attendee in checkers
-                Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=is_checker)
+            is_checker = attendee in checkers
+            Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=is_checker)
 
 
 

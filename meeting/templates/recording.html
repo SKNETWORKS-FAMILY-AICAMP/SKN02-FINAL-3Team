@@ -224,7 +224,7 @@
                     'X-CSRFToken': csrfToken
                 }
             });
-
+        console.log(response)
             if (response.ok) {
                 console.log('녹음 파일이 성공적으로 저장되었습니다.');
                 window.location.href = "{% url 'main' %}";
