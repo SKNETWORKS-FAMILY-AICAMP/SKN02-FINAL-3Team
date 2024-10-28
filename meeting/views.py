@@ -33,16 +33,16 @@ def save_audio(request):
     if request.method == 'POST':
         # 빈 Meeting 객체를 생성하여 저장하고 id를 자동 생성
         meeting = Meeting.objects.create()  # 기본 값으로 빈 Meeting 객체 생성
-        folder = 'record_dir'  # 저장할 폴더
+
         # 파일 이름
         filename = f"{meeting.id}.wav"
         # 파일 경로 설정
-        file_path = os.path.join(folder, filename)
+        file_path = os.path.join(RECORD_DIR, filename)
         audio_file = request.FILES['audio']
 
         # 해당 폴더가 없다면 생성
-        if not os.path.exists(folder):
-            os.makedirs(folder)
+        if not os.path.exists(RECORD_DIR):
+            os.makedirs(RECORD_DIR)
         # 파일 저장
         with open(file_path, 'wb+') as destination:
             for chunk in audio_file.chunks():
@@ -52,15 +52,19 @@ def save_audio(request):
         meeting.started_at = request.POST['startTime']
         meeting.ended_at = request.POST['endTime']
         meeting.title = request.POST.get('meetingName')
-        meeting.host = request.user.email
-        meeting.save()
+        meeting.host_id = request.user
         print(meeting)
+        meeting.save()
+
 
         attendees = request.POST.getlist('attendees[]') # 리스트로 받음
         checkers = request.POST.getlist('checkers[]')
         for attendee in attendees:
-            is_checker = attendee in checkers
-            Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=is_checker)
+            for checker in checkers:
+                if checker == attendee :
+                    Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=True, created_at=meeting.started_at)
+                else :
+                    Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=False, created_at=meeting.started_at)
 
 
 
