@@ -1,0 +1,55 @@
+body {
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        background-color: white;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        padding: 0;
+      }
+      .left-panel {
+        background: linear-gradient(to bottom right, #e0f7fa, #b3e5fc);
+        padding: 40px;
+        color: #333;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .right-panel {
+        padding: 40px;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .logo {
+        margin-bottom: 20px;
+      }
+      .btn-google {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .btn-google img {
+        width: 20px;
+        margin-right: 10px;
+      }
