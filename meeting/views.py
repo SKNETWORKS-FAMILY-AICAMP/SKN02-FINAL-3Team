@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from .models import Meeting, Participant
+from .models import Meeting, Participant, User
 from django.http import JsonResponse
 import os
 
@@ -38,47 +38,54 @@ RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 @csrf_exempt
 def save_audio(request):
     if request.method == 'POST':
-        # 빈 Meeting 객체를 생성하여 저장하고 id를 자동 생성
-        meeting = Meeting.objects.create()  # 기본 값으로 빈 Meeting 객체 생성
-
-        # 파일 이름
-        filename = f"{meeting.id}.wav"
-        # 파일 경로 설정
-        file_path = os.path.join(RECORD_DIR, filename)
-        audio_file = request.FILES['audio']
-
-        # 해당 폴더가 없다면 생성
-        if not os.path.exists(RECORD_DIR):
-            os.makedirs(RECORD_DIR)
-        # 파일 저장
-        with open(file_path, 'wb+') as destination:
-            for chunk in audio_file.chunks():
-                destination.write(chunk)
 
         # db 저장
-        meeting.started_at = request.POST['startTime']
-        meeting.ended_at = request.POST['endTime']
-        meeting.title = request.POST.get('meetingName')
-        # request.user가 유효한지 확인
-        if request.user and request.user.is_authenticated:
-            meeting.host = request.user
-        else:
-            return JsonResponse({'error': 'User is not authenticated'}, status=401)
+        started_at = request.POST['startTime']
+        ended_at = request.POST['endTime']
+        title = request.POST.get('meetingName')
+        if title == "":
+            return render(request, '401.html', status=401)
+        else :
+            host_id = request.user.id
+            meeting = Meeting.objects.create(
+                title = title,
+                started_at = started_at,
+                ended_at = ended_at,
+                host_id = host_id,
+            )
 
-        # meeting.save()
+            # 파일 이름
+            filename = f"{meeting.id}.wav"
+            # 파일 경로 설정
+            file_path = os.path.join(RECORD_DIR, filename)
+            audio_file = request.FILES['audio']
+            meeting.file_path = file_path
+            meeting.save()
 
-        attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
-        checkers = request.POST.getlist('checkers[]')
-        for attendee in attendees:
-            for checker in checkers:
-                if checker == attendee:
-                    Participant.objects.create(
-                        meeting=meeting, attendee=attendee, is_checker=True, created_at=meeting.started_at)
-                else:
-                    Participant.objects.create(
-                        meeting=meeting, attendee=attendee, is_checker=False, created_at=meeting.started_at)
+            # 해당 폴더가 없다면 생성
+            if not os.path.exists(RECORD_DIR):
+                os.makedirs(RECORD_DIR)
+            # 파일 저장
+            with open(file_path, 'wb+') as destination:
+                for chunk in audio_file.chunks():
+                    destination.write(chunk)
 
-        return JsonResponse({'message': 'File uploaded successfully'}, status=200)
+            attendees = request.POST.getlist('attendees[]') # 리스트로 받음
+            print(attendees)
+            checkers = request.POST.getlist('checkers[]')
+            print(checkers)
+            for attendee in attendees:
+                for checker in checkers:
+                    if checker == attendee and checker == host_id:
+                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=host_id)
+                    elif checker == attendee and checker != host_id :
+                        user = User.objects.filter(id=checker)[0]
+                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=user)
+                    else :
+                        continue
+
+
+            return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 

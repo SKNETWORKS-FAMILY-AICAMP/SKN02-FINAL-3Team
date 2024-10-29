@@ -42,7 +42,7 @@
                     {% for meeting in meetings %}
                         <div class="list-item" onclick="toggleDetails('{{ meeting.id }}')">
                             <span class="list-item-title">{{ meeting.title }}</span>
-    <!--                        <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }} {{ meeting.host }}</span>-->
+                            <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }}<br>{{ meeting.host }}</span>
                         </div>
                     {% endfor %}
                 </div>

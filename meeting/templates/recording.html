@@ -81,6 +81,9 @@
         window.location.href = '{% url "main" %}'; // 여기에 원하는 링크를 입력
     });
 
+    const user = {
+        email: "{{ user.email }}",
+    };
 
     let mediaRecorder;
     let audioChunks = [];
@@ -192,8 +195,24 @@
     // 모달에서 "예" 버튼을 클릭하면 실행
     document.querySelector('#yes-button').addEventListener('click', async function() {
 
-        const meetingName = document.getElementById('title_input_element').value;
-        formData.append('meetingName', meetingName)
+        const meetingNameInput = document.getElementById('title_input_element');
+        const meetingName = meetingNameInput.value;
+
+        if (!meetingName) {
+            // 입력 값이 비어있으면 테두리를 빨간색으로 설정
+            meetingNameInput.style.border = '2px solid red';
+
+            // 300ms 후 원래 테두리로 복귀
+            setTimeout(() => {
+                meetingNameInput.style.border = '';
+            }, 300);
+            // 함수 실행 중단
+            return;
+
+        } else {
+            // 값이 있으면 formData에 추가
+            formData.append('meetingName', meetingName);
+        }
 
         // 참석자 이메일 수집
         const emailButtons1 = document.querySelectorAll('#attendent-email-buttons button');
