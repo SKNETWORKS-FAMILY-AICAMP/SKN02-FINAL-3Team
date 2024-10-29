@@ -6,27 +6,34 @@ from .models import Meeting, Participant, User
 from django.http import JsonResponse
 import os
 
+
 def login_view(request):
     return render(request, 'login.html')
 
+
 def index(request):
-    print(request)
     if request.user.is_authenticated:
-        meetings = Meeting.objects.all().order_by('-started_at')[:15]
+        host_id = request.user.id
+        meetings = Meeting.objects.filter(
+            host_id=host_id).order_by('-started_at')[:15]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
     else:
         return redirect('login')
 
+
 def meeting_summary(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    Participants = Participant.objects.filter(meeting=meeting)
+    Participants = Participant.objects.filter(meeting_id=meeting)
     return render(request, 'meeting.html', {'meeting': meeting, 'Participants': Participants})
+
 
 def recording_view(request):
     return render(request, 'recording.html')
 
+
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
+
 
 @csrf_exempt
 def save_audio(request):
@@ -83,7 +90,7 @@ def save_audio(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-## error 처리
+# error 처리
 # 400, 404,500은 handler로 처리
 # 401 Unauthorized (일반적으로 직접 핸들링 필요)
 def unauthorized(request):
