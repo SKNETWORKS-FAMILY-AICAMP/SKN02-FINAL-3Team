@@ -15,7 +15,7 @@ class Meeting(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Participant(models.Model):
@@ -26,7 +26,7 @@ class Participant(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class Notification(models.Model):
