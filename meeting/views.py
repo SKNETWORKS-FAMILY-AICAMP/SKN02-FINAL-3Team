@@ -6,27 +6,34 @@ from .models import Meeting, Participant
 from django.http import JsonResponse
 import os
 
+
 def login_view(request):
     return render(request, 'login.html')
 
+
 def index(request):
-    print(request)
     if request.user.is_authenticated:
-        meetings = Meeting.objects.all().order_by('-started_at')[:15]
+        host_id = request.user.id
+        meetings = Meeting.objects.filter(
+            host_id=host_id).order_by('-started_at')[:15]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
     else:
         return redirect('login')
 
+
 def meeting_summary(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    Participants = Participant.objects.filter(meeting=meeting)
+    Participants = Participant.objects.filter(meeting_id=meeting)
     return render(request, 'meeting.html', {'meeting': meeting, 'Participants': Participants})
+
 
 def recording_view(request):
     return render(request, 'recording.html')
 
+
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
+
 
 @csrf_exempt
 def save_audio(request):
@@ -52,28 +59,31 @@ def save_audio(request):
         meeting.started_at = request.POST['startTime']
         meeting.ended_at = request.POST['endTime']
         meeting.title = request.POST.get('meetingName')
-        meeting.host_id = request.user
-        print(meeting)
-        meeting.save()
+        # request.user가 유효한지 확인
+        if request.user and request.user.is_authenticated:
+            meeting.host = request.user
+        else:
+            return JsonResponse({'error': 'User is not authenticated'}, status=401)
 
+        # meeting.save()
 
-        attendees = request.POST.getlist('attendees[]') # 리스트로 받음
+        attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
         checkers = request.POST.getlist('checkers[]')
         for attendee in attendees:
             for checker in checkers:
-                if checker == attendee :
-                    Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=True, created_at=meeting.started_at)
-                else :
-                    Participant.objects.create(meeting=meeting, attendee=attendee, is_checker=False, created_at=meeting.started_at)
-
-
+                if checker == attendee:
+                    Participant.objects.create(
+                        meeting=meeting, attendee=attendee, is_checker=True, created_at=meeting.started_at)
+                else:
+                    Participant.objects.create(
+                        meeting=meeting, attendee=attendee, is_checker=False, created_at=meeting.started_at)
 
         return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-## error 처리
+# error 처리
 # 400, 404,500은 handler로 처리
 # 401 Unauthorized (일반적으로 직접 핸들링 필요)
 def unauthorized(request):

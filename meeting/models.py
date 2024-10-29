@@ -41,4 +41,4 @@ class Notification(models.Model):
         return self.content
 
 
-## USER table - Django에서 자동 생성
+# USER table - Django에서 자동 생성
