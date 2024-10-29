@@ -223,7 +223,7 @@
         // 확인자 이메일 수집
         const emailButtons2 = document.querySelectorAll('#checker-email-buttons button');
         emailButtons2.forEach(button => {
-            formData.append('checker[]', button.textContent); // 버튼의 텍스트를 이메일로 추가
+            formData.append('checkers[]', button.textContent); // 버튼의 텍스트를 이메일로 추가
         });
 
         formData.append('audio', audioBlob);

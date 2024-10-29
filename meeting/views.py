@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from pycparser.c_ast import Continue
+
 from .models import Meeting, Participant, User
 from django.http import JsonResponse
 import os
@@ -70,17 +72,20 @@ def save_audio(request):
                 for chunk in audio_file.chunks():
                     destination.write(chunk)
 
+            user_email = request.user.email
             attendees = request.POST.getlist('attendees[]') # 리스트로 받음
+            if user_email not in attendees:
+                attendees.append(user_email)
+
             print(attendees)
             checkers = request.POST.getlist('checkers[]')
             print(checkers)
             for attendee in attendees:
                 for checker in checkers:
-                    if checker == attendee and checker == host_id:
-                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=host_id)
-                    elif checker == attendee and checker != host_id :
-                        user = User.objects.filter(id=checker)[0]
-                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=user)
+                    if checker == attendee :
+                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                    elif checker != attendee :
+                        Participant.objects.create(meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
                     else :
                         continue
 
