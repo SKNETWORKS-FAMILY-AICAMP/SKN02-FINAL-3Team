@@ -31,16 +31,16 @@
                   </div>
             </div>
           </div>
-          <div class="create-meeting">
-            <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
-          </div>
+
 
 
             <div class="list-container" id="list-container">
-
+                <div class="create-meeting">
+                    <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
+                </div>
                 <div id="list-items">
                     {% for meeting in meetings %}
-                        <div class="list-item" onclick="toggleDetails('{{ meeting.id }}')">
+                        <div class="list-item" onclick="toggleDetails1('{{ meeting.id }}')">
                             <span class="list-item-title">{{ meeting.title }}</span>
                             <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }}<br>{{ meeting.host }}</span>
                         </div>
@@ -60,7 +60,7 @@
     <script>
       let currentItem = null;
 
-      function toggleDetails(meeting_id) {
+      function toggleDetails1(meeting_id) {
         const listContainer = document.getElementById('list-container');
         const detailsContainer = document.getElementById('details');
         const detailsTitle = document.getElementById('details-title');
