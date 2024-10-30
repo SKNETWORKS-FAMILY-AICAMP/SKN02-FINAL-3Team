@@ -11,6 +11,7 @@ urlpatterns = [
     path('recording/', views.recording_view, name='recording'),
     path('meeting_summary/<int:meeting_id>/', views.meeting_summary, name='meeting_summary'),
     path('save_audio', views.save_audio, name='save_audio'),
+
 ]
 
 handler400 = "meeting.views.bad_request"

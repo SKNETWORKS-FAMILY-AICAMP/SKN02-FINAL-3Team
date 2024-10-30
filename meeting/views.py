@@ -33,6 +33,11 @@ def recording_view(request):
     return render(request, 'recording.html')
 
 
+def detail_view(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    Participants = Participant.objects.filter(meeting_id=meeting)
+    return render(request, meeting_detail.html, {'meeting': meeting, 'Participants': Participants})
+
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 
@@ -94,13 +99,3 @@ def save_audio(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
-# error 처리
-# 400, 404,500은 handler로 처리
-# 401 Unauthorized (일반적으로 직접 핸들링 필요)
-def unauthorized(request):
-    return render(
-        request,
-        'error.html',
-        {'error_code': 401, 'error_message': "Authorization Failed"},
-        status=401)

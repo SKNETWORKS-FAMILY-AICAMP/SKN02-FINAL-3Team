@@ -1,9 +1,12 @@
 .recording-container {
-    width: 100%;
-    border-right: 1px solid #ccc;
+    margin-right: 10px;
+    margin-left: 10px;
+    background-color: #ffffff;
     overflow-y: auto;
-    padding: 10px;
-    transition: width 0.5s ease;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #1c1f23 ;
+
 }
 .wave {
     display: inline-block;
@@ -14,6 +17,8 @@
     height: 50px;
 }
 .listening-container {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,8 +28,9 @@
     font-size: 2rem;
     color: #007bff;
 }
-#stop-recording-button {
-    margin-top: 20px;
+.endButton-container{
+    text-align: center;
+    margin-bottom: 5vh;
 }
 #end-button {
     margin-top: 50px;
@@ -36,7 +42,7 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 50px;
-    justify-content: center;
+    display:inline-block;
 }
 .greeting {
     position: absolute;
