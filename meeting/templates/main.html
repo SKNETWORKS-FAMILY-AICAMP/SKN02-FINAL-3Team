@@ -6,6 +6,7 @@
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'meeting/css/main.css' %}?after" media="screen">
+    <link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}?after" media="screen">
 {% endblock %}
 
 
@@ -50,8 +51,6 @@
                 <p id="details-content">Select an item from the list to see more details here.</p>
             </div>
           </div>
-    </div>
-
 {% endblock %}
 
 {% block script %}
@@ -61,9 +60,7 @@
       function toggleDetails1(meeting_id) {
         const listContainer = document.getElementById('list-container');
         const detailsContainer = document.getElementById('details');
-        const detailsTitle = document.getElementById('details-title');
         const detailsContent = document.getElementById('details-content');
-        const detailsInfo = document.getElementById('details-info');
 
         if (currentItem === meeting_id) {
           // Hide the details if the same item is clicked again
@@ -83,7 +80,6 @@
             });
         }
       }
-
 
         $("#search-title").click(function () {
           const query = prompt("검색할 제목을 입력하세요:");
