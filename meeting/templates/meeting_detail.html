@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회의 요약</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'meeting/css/meeting.css' %}?after">
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <span>{{ meeting.title }}</span>
+        <span>{{ meeting.started_at|date:"Y-m-d H:i" }} 작성자 {{ meeting.host }}</span>
+      </div>
+      <div class="card-body">
+        <p>
+          <strong>참여자</strong><br />{% for participant in Participants %}
+          {{participant}} {% endfor %}
+        </p>
+        <p>
+          <strong>확인자</strong><br />{% for participant in Participants %} {% if
+          participant.ischecker == 'True' %} {{ participant }} {% endfor %}
+        </p>
+
+        <p><strong>회의 전문</strong></p>
+        <p>{{meeting.content}}</p>
+        <br>
+
+      </div>
+
+    </div>
+  </body>
+</html>

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from pycparser.c_ast import Continue
 
 from .models import Meeting, Participant, User
+from .storage import S3Client
 from django.http import JsonResponse
 import os
 
@@ -36,7 +37,8 @@ def recording_view(request):
 def detail_view(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     Participants = Participant.objects.filter(meeting_id=meeting)
-    return render(request, meeting_detail.html, {'meeting': meeting, 'Participants': Participants})
+
+    return render(request, 'meeting.html', {'meeting': meeting, 'Participants': Participants})
 
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
@@ -60,22 +62,47 @@ def save_audio(request):
                 ended_at = ended_at,
                 host_id = host_id,
             )
+            #
+            # # 파일 이름
+            # filename = f"{meeting.id}.wav"
+            # # 파일 경로 설정
+            # file_path = os.path.join(RECORD_DIR, filename)
+            # audio_file = request.FILES['audio']
+            # meeting.file_path = file_path
+            # meeting.save()
+            #
+            # # 해당 폴더가 없다면 생성
+            # if not os.path.exists(RECORD_DIR):
+            #     os.makedirs(RECORD_DIR)
+            # # 파일 저장
+            # with open(file_path, 'wb+') as destination:
+            #     for chunk in audio_file.chunks():
+            #         destination.write(chunk)
 
-            # 파일 이름
+
+            # S3Client 인스턴스 생성 (환경 변수 또는 settings에서 AWS 자격 증명 가져오기)
+            s3_client = S3Client(
+                AWS_ACCESS_KEY_ID=settings.AWS_ACCESS_KEY_ID,
+                AWS_SECRET_ACCESS_KEY=settings.AWS_SECRET_ACCESS_KEY
+            )
+
+            # S3 버킷 이름 (settings.py에 저장되어 있다고 가정)
+            bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
+            # 파일 이름과 S3 경로 설정
             filename = f"{meeting.id}.wav"
-            # 파일 경로 설정
-            file_path = os.path.join(RECORD_DIR, filename)
-            audio_file = request.FILES['audio']
-            meeting.file_path = file_path
-            meeting.save()
+            s3_file_path = os.path.join(s3_client.base, filename)
 
-            # 해당 폴더가 없다면 생성
-            if not os.path.exists(RECORD_DIR):
-                os.makedirs(RECORD_DIR)
-            # 파일 저장
-            with open(file_path, 'wb+') as destination:
-                for chunk in audio_file.chunks():
-                    destination.write(chunk)
+            # 업로드할 파일 가져오기
+            audio_file = request.FILES['audio']
+
+            # 파일을 S3에 업로드하고, 업로드된 S3 경로를 DB에 저장
+            s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
+
+            # Meeting 객체에 S3 경로 저장
+            meeting = Meeting.objects.get(id=meeting.id)
+            meeting.file_path = s3_file_path  # S3 파일 경로를 DB에 저장
+            meeting.save()
 
             user_email = request.user.email
             attendees = request.POST.getlist('attendees[]') # 리스트로 받음

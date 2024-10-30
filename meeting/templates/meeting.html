@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 {% load static %}
+
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회의 요약</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="{% static 'meeting/bootstrap/bootstrap.css' %}" rel="stylesheet">
+    <script href="{% static 'meeting/bootstrap/bootstrap.bundle.min.js' %}" rel="stylesheet"></script>
     <link rel="stylesheet" href="{% static 'meeting/css/meeting.css' %}?after">
+    <link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}?after" media="screen">
   </head>
   <body>
     <div class="card">
@@ -35,10 +31,42 @@
         <p>{{meeting.summary}}</p>
         <br>
         <div class="detailMeeting">
-          <a href="">전문 보기</a>
+          <button type="button" id="open-modal" class="btn btn-open-modal" data-bs-toggle="modal" data-bs-target="#contentDetail">전문 보기</button>
         </div>
-      </div>
 
+        <!--Modal-->
+        <div class="modal fade" id="contentDetail" tabindex="-1" aria-labelledby="contentDetailLabel" aria-hidden="True">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">회의록 전문 보기</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="modalBody">
+                <!-- meeting_detail의 html로 연결됨-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </body>
+<script>
+        <!--모달에서 아니오을 누르면 main화면으로 넘어가는 코드 구현-->
+        // 모달 열고 닫는 함수
+        const finishModal = document.getElementById('contentDetail');
+        const openModal = () => finishModal.style.display = 'flex';
+        const closeModal = () => finishModal.style.display = 'none';
+
+        // "회의 종료" 버튼 클릭 시 모달 열기
+        document.getElementById('open-modal').addEventListener('click', () => {
+            openModal();
+        });
+
+        // "아니요" 버튼과 닫기 버튼 클릭 시 모달 닫기
+        document.getElementById('close-button').addEventListener('click', () => {
+            closeModal();
+        });
+</script>
 </html>
