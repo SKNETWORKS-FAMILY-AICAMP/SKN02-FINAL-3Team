@@ -5,7 +5,7 @@
 
 {% block css %}
     {{ block.super }}
-<link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}" media="screen">
+<link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}?after" media="screen">
 {% endblock %}
 
 {% block contents %}
@@ -14,9 +14,9 @@
                 <img src="{% static 'images/listening.gif' %}" alt="" height="70px">
                 <div class="listening-text">&nbsp;&nbsp;Listening...</div>
             </div>
-
-            <button id="end-button" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
-
+            <div class="endButton-container">
+                <button id="end-button" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
+            </div>
             <!-- 모달 -->
             <div class="modal" id="finishModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="finishModalLabel" >
                 <div class="modal-dialog">
