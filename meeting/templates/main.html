@@ -6,7 +6,6 @@
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'meeting/css/main.css' %}?after" media="screen">
-    <link rel="stylesheet" href="{% static 'meeting/css/recording.css' %}?after" media="screen">
 {% endblock %}
 
 
@@ -44,13 +43,32 @@
                             <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }}<br>{{ meeting.host }}</span>
                         </div>
                     {% endfor %}
+
+                    <!--Modal-->
+                        <div class="modal fade" id="contentDetail">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">{{ meeting.title }} 전문 보기</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body" id="modalBody">
+                                {{ meeting.content }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                 </div>
             </div>
             <div class="details-container" id="details">
                 <h3 id="details-title">{{ meeting.title }}</h3>
                 <p id="details-content">Select an item from the list to see more details here.</p>
             </div>
-          </div>
+        </div>
+
+
+
 {% endblock %}
 
 {% block script %}
@@ -61,6 +79,8 @@
         const listContainer = document.getElementById('list-container');
         const detailsContainer = document.getElementById('details');
         const detailsContent = document.getElementById('details-content');
+        const modalTitle = document.querySelector('#contentDetail .modal-title');
+        const modalBody = document.querySelector('#contentDetail .modal-body');
 
         if (currentItem === meeting_id) {
           // Hide the details if the same item is clicked again
@@ -72,12 +92,18 @@
           fetch(`/meeting_summary/${meeting_id}/`)
             .then(response => response.text())
             .then(html => {
-              // Show the details of the selected item
-              detailsContent.innerHTML = html;
-              detailsContainer.classList.add('open');
-              listContainer.classList.add('split-view');
-              currentItem = meeting_id;
+                // Show the details of the selected item
+                detailsContent.innerHTML = html;
+                detailsContainer.classList.add('open');
+                listContainer.classList.add('split-view');
+                currentItem = meeting_id;
             });
+          fetch(`/meeting_detail/${meeting_id}/`)
+              .then(response => response.text())
+              .then(html => {
+                  modalTitle.textContent = `전문 보기`;  // 예: meeting_id를 제목에 포함
+                  modalBody.innerHTML = html; // 서버에서 가져온 회의 내용을 모달 본문에 삽입
+              });
         }
       }
 
@@ -120,6 +146,8 @@
               .append("<div>요약문 검색 결과: " + query + "</div>");
           }
         });
+
+
 
     </script>
 {% endblock %}

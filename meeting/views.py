@@ -38,7 +38,7 @@ def detail_view(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     Participants = Participant.objects.filter(meeting_id=meeting)
 
-    return render(request, 'meeting.html', {'meeting': meeting, 'Participants': Participants})
+    return render(request, 'meeting_detail.html', {'meeting': meeting, 'Participants': Participants})
 
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
@@ -97,7 +97,8 @@ def save_audio(request):
             audio_file = request.FILES['audio']
 
             # 파일을 S3에 업로드하고, 업로드된 S3 경로를 DB에 저장
-            s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
+            result = s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
+            print(result)
 
             # Meeting 객체에 S3 경로 저장
             meeting = Meeting.objects.get(id=meeting.id)
