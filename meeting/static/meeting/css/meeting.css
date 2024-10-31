@@ -33,15 +33,19 @@
     padding-left: 0;
   }
 
- .detailMeeting{
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   background-color: #e7f1ff;
-   border-radius: 5px;
-   margin-bottom: 20px;
-   cursor: pointer;
-   padding: 10px;
- }
+  .detailMeeting {
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button#open-modal{
+    justify-content: center;
+    align-items: center;
+    background-color: #e7f1ff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 10px;
+  }
 
 
