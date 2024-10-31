@@ -21,13 +21,13 @@
         <p>
           <strong>참여자</strong><br />
           {% for user in users %}
-            {{ user }}
+            {{ user.email }}
           {% endfor %}
         </p>
         <p>
           <strong>확인자</strong><br />
           {% for checkeruser in checkerusers %}
-            {{ checkeruser }}
+            {{ checkeruser.email }}
           {% endfor %}
         </p>
 
