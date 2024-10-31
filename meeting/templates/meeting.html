@@ -8,7 +8,7 @@
     <title>회의 요약</title>
     <script src="{% static 'meeting/jquery/jquery.min.js' %}"></script>
     <link href="{% static 'meeting/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <script src="{% static 'meeting/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'meeting/bootstrap/bootstrap..min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'meeting/css/meeting.css' %}?after">
   </head>
   <body>
@@ -34,14 +34,28 @@
         <p><strong>회의 요약</strong></p>
         <p>{{meeting.summary}}</p>
         <br>
-        <div class="detailMeeting">
-          <button type="button" id="open-modal" class="btn" data-bs-toggle="modal" data-bs-target="#contentDetail">전문 보기</button>
-        </div>
+
 
       </div>
     </div>
   </body>
 <script>
+  let currentItem = null;
 
+      function toggleDetails2(meeting_id) {
+        const modalTitle = document.querySelector('#contentDetail .modal-title');
+        const modalBody = document.querySelector('#contentDetail .modal-body');
+
+        if (currentItem === meeting_id) {
+          currentItem = null;
+        } else {
+          fetch(`/meeting_detail/${meeting_id}/`)
+              .then(response => response.text())
+              .then(html => {
+                  modalTitle.textContent = `전문 보기`;  // 예: meeting_id를 제목에 포함
+                  modalBody.innerHTML = html; // 서버에서 가져온 회의 내용을 모달 본문에 삽입
+              });
+        }
+      }
 </script>
 </html>

@@ -46,24 +46,6 @@ def recording_view(request):
     return render(request, 'recording.html')
 
 
-def detail_view(request, meeting_id):
-    # 특정 meeting_id의 Meeting 객체 가져오기
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    # 1. 참가자의 user_id 리스트 추출
-    participants = Participant.objects.filter(meeting=meeting_id).values_list('user_id', flat=True)
-    # 2. Checker 역할인 참가자의 user_id 리스트 추출
-    checkers_id = Participant.objects.filter(meeting_id=meeting_id, is_checker=True).values_list('user_id', flat=True)
-    # 3. 모든 참가자의 User 객체 가져오기
-    users = User.objects.filter(id__in=participants).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
-    # 4. Checker 역할인 참가자의 User 객체 가져오기
-    checkerusers = User.objects.filter(id__in=checkers_id).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
-
-    return render(request, 'meeting_detail.html', {
-        'meeting': meeting,
-        'users': users,
-        'checkerusers': checkerusers
-    })
-
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
 
@@ -80,12 +62,13 @@ def save_audio(request):
             return render(request, '401.html', status=401)
         else :
             host_id = request.user.id
-            meeting = Meeting.objects.create(
+            meeting = Meeting(
                 title = title,
                 started_at = started_at,
                 ended_at = ended_at,
                 host_id = host_id,
             )
+            meeting.save()
 
             # S3Client 인스턴스 생성 (환경 변수 또는 settings에서 AWS 자격 증명 가져오기)
             s3_client = S3Client(
@@ -110,7 +93,7 @@ def save_audio(request):
             # Meeting 객체에 S3 경로 저장
             meeting = Meeting.objects.get(id=meeting.id)
             meeting.file_path = s3_file_path  # S3 파일 경로를 DB에 저장
-            meeting._do_update()
+            meeting.save()
 
             user_email = request.user.email
             attendees = request.POST.getlist('attendees[]') # 리스트로 받음
