@@ -76,3 +76,9 @@
 .create-meeting:hover {
   background-color: #d0e4ff;
 }
+
+#contentDetail {
+  width: 100px;
+  display: block;
+  z-index: 1050;
+}
