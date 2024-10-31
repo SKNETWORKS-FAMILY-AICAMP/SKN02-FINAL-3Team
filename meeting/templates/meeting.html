@@ -40,22 +40,6 @@
     </div>
   </body>
 <script>
-  let currentItem = null;
 
-      function toggleDetails2(meeting_id) {
-        const modalTitle = document.querySelector('#contentDetail .modal-title');
-        const modalBody = document.querySelector('#contentDetail .modal-body');
-
-        if (currentItem === meeting_id) {
-          currentItem = null;
-        } else {
-          fetch(`/meeting_detail/${meeting_id}/`)
-              .then(response => response.text())
-              .then(html => {
-                  modalTitle.textContent = `전문 보기`;  // 예: meeting_id를 제목에 포함
-                  modalBody.innerHTML = html; // 서버에서 가져온 회의 내용을 모달 본문에 삽입
-              });
-        }
-      }
 </script>
 </html>
