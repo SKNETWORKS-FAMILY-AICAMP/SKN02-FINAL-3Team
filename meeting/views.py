@@ -104,32 +104,29 @@ def save_audio(request):
             audio_file = request.FILES['audio']
 
             # 파일을 S3에 업로드하고, 업로드된 S3 경로를 DB에 저장
-            result = s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
-            print(result)
+            s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
 
             # Meeting 객체에 S3 경로 저장
             meeting = Meeting.objects.get(id=meeting.id)
             meeting.file_path = s3_file_path  # S3 파일 경로를 DB에 저장
-            meeting._do_update()
+            meeting.save()
 
             user_email = request.user.email
+
             attendees = request.POST.getlist('attendees[]') # 리스트로 받음
             if user_email not in attendees:
                 attendees.append(user_email)
-
             print(attendees)
+
             checkers = request.POST.getlist('checkers[]')
             print(checkers)
+
             for attendee in attendees:
-                for checker in checkers:
-                    if checker == attendee :
-                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    elif checker != attendee :
-                        Participant.objects.create(meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    else :
-                        continue
-
-
+                if attendee in checkers:
+                    Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                else:
+                    Participant.objects.create(meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+            
             return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
