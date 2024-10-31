@@ -1,0 +1,47 @@
+ body {
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f8f9fa;
+        padding: 20px;
+      }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .header .greeting {
+    font-size: 1.2rem;
+    color: #333;
+  }
+  .card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .card-header {
+    background-color: #e7f1ff;
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #0d6efd;
+  }
+  .card-body {
+    color: #333;
+  }
+  .list-group-item {
+    border: none;
+    padding-left: 0;
+  }
+
+ .detailMeeting{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: #e7f1ff;
+   border-radius: 5px;
+   margin-bottom: 20px;
+   cursor: pointer;
+   padding: 10px;
+ }
+
+

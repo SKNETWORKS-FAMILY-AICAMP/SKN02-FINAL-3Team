@@ -16,6 +16,7 @@ urlpatterns = [
          name='store_meeting_detail'),
     path('meeting/summary', views.store_meeting_summary,
          name='store_meeting_summary'),
+    path('meeting_detail/<int:meeting_id>/', views.detail_view, name='detail'),
 ]
 
 handler400 = "meeting.views.bad_request"

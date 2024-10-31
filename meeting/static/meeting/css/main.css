@@ -69,12 +69,15 @@
   justify-content: center;
   align-items: center;
   background-color: #e7f1ff;
-  margin: 1px 11px;
-  padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
   cursor: pointer;
+  padding: 10px;
 }
 .create-meeting:hover {
   background-color: #d0e4ff;
+}
+
+#contentDetail {
+  display: block;
 }
