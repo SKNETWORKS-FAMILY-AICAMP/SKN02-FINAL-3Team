@@ -19,12 +19,16 @@
       </div>
       <div class="card-body">
         <p>
-          <strong>참여자</strong><br />{% for participant in Participants %}
-          {{participant}} {% endfor %}
+          <strong>참여자</strong><br />
+          {% for user in users %}
+            {{ user }}
+          {% endfor %}
         </p>
         <p>
-          <strong>확인자</strong><br />{% for participant in Participants %} {% if
-          participant.ischecker == 'True' %} {{ participant }} {% endfor %}
+          <strong>확인자</strong><br />
+          {% for checkeruser in checkerusers %}
+            {{ checkeruser }}
+          {% endfor %}
         </p>
 
         <p><strong>회의 요약</strong></p>
@@ -39,10 +43,5 @@
   </body>
 <script>
 
-     // document.getElementById('open-modal').addEventListener('click', () => {
-     //   // Bootstrap Modal 인스턴스 생성 및 열기
-     //   const modal = new bootstrap.Modal(document.getElementById('contentDetail'));
-     //   modal.show();
-     // });
 </script>
 </html>
