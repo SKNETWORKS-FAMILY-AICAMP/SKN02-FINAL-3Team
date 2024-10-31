@@ -72,5 +72,10 @@
         <p></p>
       </div>
     </div>
+    <div class="header">
+      <button>전문 보기</button>
+
+      {% if user.is_authenticated %} {% else %} {% endif %}
+    </div>
   </body>
 </html>

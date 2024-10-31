@@ -38,6 +38,16 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +61,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'rest_framework',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -112,7 +123,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'do_it_django_prj.wsgi.application'
-
+# 소셜 계정 토큰 저장 설정
+SOCIALACCOUNT_STORE_TOKENS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -126,8 +138,8 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PW'),  # 데이터베이스 비밀번호
         'HOST': os.getenv('DB_HOST'),  # 데이터베이스 호스트
         'PORT': os.getenv('DB_PORT'),  # 데이터베이스 포트
-        'OPTIONS' : {
-            'ssl' : {'ca' : str(BASE_DIR/'etc/ssl/certs/global-bundle.pem')},
+        'OPTIONS': {
+            'ssl': {'ca': str(BASE_DIR/'etc/ssl/certs/global-bundle.pem')},
         }
     }
 }
@@ -172,4 +184,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

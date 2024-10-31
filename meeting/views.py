@@ -8,6 +8,11 @@ from .models import Meeting, Participant, User
 from django.http import JsonResponse
 import os
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+
 
 def login_view(request):
     return render(request, 'login.html')
@@ -47,13 +52,13 @@ def save_audio(request):
         title = request.POST.get('meetingName')
         if title == "":
             return render(request, '401.html', status=401)
-        else :
+        else:
             host_id = request.user.id
             meeting = Meeting.objects.create(
-                title = title,
-                started_at = started_at,
-                ended_at = ended_at,
-                host_id = host_id,
+                title=title,
+                started_at=started_at,
+                ended_at=ended_at,
+                host_id=host_id,
             )
 
             # 파일 이름
@@ -73,7 +78,7 @@ def save_audio(request):
                     destination.write(chunk)
 
             user_email = request.user.email
-            attendees = request.POST.getlist('attendees[]') # 리스트로 받음
+            attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
             if user_email not in attendees:
                 attendees.append(user_email)
 
@@ -82,13 +87,14 @@ def save_audio(request):
             print(checkers)
             for attendee in attendees:
                 for checker in checkers:
-                    if checker == attendee :
-                        Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    elif checker != attendee :
-                        Participant.objects.create(meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    else :
+                    if checker == attendee:
+                        Participant.objects.create(
+                            meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                    elif checker != attendee:
+                        Participant.objects.create(
+                            meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                    else:
                         continue
-
 
             return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 
@@ -104,3 +110,23 @@ def unauthorized(request):
         'error.html',
         {'error_code': 401, 'error_message': "Authorization Failed"},
         status=401)
+
+
+@api_view(['PUT'])
+def store_meeting_detail(request):
+    meeting_id = request.data['meeting_id']
+    meeting = Meeting.objects.get(id=meeting_id)
+    meeting.content = request.data['content']
+    meeting.save()
+
+    return Response({'message': 'Meeting detail updated successfully'}, status=200)
+
+
+@api_view(['PUT'])
+def store_meeting_summary(request):
+    meeting_id = request.data['meeting_id']
+    meeting = Meeting.objects.get(id=meeting_id)
+    meeting.summary = request.data['summary']
+    meeting.save()
+
+    return Response({'message': 'Meeting summary updated successfully'}, status=200)

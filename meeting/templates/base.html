@@ -5,40 +5,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meeting Bridge {% block title %}{% endblock %}</title>
-    <script rel="stylesheet" href="{% static 'meeting/jquery/jquery.min.js' %}"></script>
-    <link href="{% static 'meeting/bootstrap/bootstrap.css' %}" rel="stylesheet">
-    <script href="{% static 'meeting/bootstrap/bootstrap.bundle.min.js' %}" rel="stylesheet"></script>
+    <script
+      rel="stylesheet"
+      href="{% static 'meeting/jquery/jquery.min.js' %}"
+    ></script>
+    <link href="{% static 'meeting/bootstrap/bootstrap.css' %}" rel="stylesheet" />
+    <script
+      href="{% static 'meeting/bootstrap/bootstrap.bundle.min.js' %}"
+      rel="stylesheet"
+    ></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
-
-      {% block css %}
-        <link rel="stylesheet" href="{% static 'meeting/css/base.css' %}">
-      {% endblock %}
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'meeting/css/base.css' %}" />
+    {% endblock %}
   </head>
   <body>
     <div class="main-container">
-        <div class="header">
-          <button>알림함</button>
+      <div class="header">
+        <button>알림함</button>
 
-          {% if user.is_authenticated %}
-          <div>{{ user.last_name }}{{ user.first_name }}님, 안녕하세요!</div>
-          {% else %}
-          <a href="{% url 'login' %}">로그인</a>
-          {% endif %}
-        </div>
+        {% if user.is_authenticated %}
+        <div>{{ user.last_name }}{{ user.first_name }}님, 안녕하세요!</div>
+        {% else %}
+        <a href="{% url 'login' %}">로그인</a>
+        {% endif %}
+      </div>
 
-        {% block contents %}
-
-        {% endblock %}
-
+      {% block contents %} {% endblock %}
     </div>
     <footer class="py-3 bg-dark">
-        <p class="m-0 text-sm-center text-white">Copyright &copy; Mind Bridge</p>
+      <p class="m-0 text-sm-center text-white">Copyright &copy; Mind Bridge</p>
     </footer>
-    {% block script %}
-    {% endblock %}
+    {% block script %} {% endblock %}
   </body>
 </html>
