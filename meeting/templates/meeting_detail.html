@@ -23,12 +23,16 @@
       </div>
       <div class="card-body">
         <p>
-          <strong>참여자</strong><br />{% for participant in Participants %}
-          {{participant}} {% endfor %}
+          <strong>참여자</strong><br />
+          {% for user in users %}
+            {{user}}
+          {% endfor %}
         </p>
         <p>
-          <strong>확인자</strong><br />{% for participant in Participants %} {% if
-          participant.ischecker == 'True' %} {{ participant }} {% endfor %}
+          <strong>확인자</strong><br />
+          {% for checkeruser in checkerusers %}
+            {% checkeruser %}}
+          {% endfor %}
         </p>
 
         <p><strong>회의 전문</strong></p>

@@ -44,7 +44,16 @@
                         </div>
                     {% endfor %}
 
-                    <!--Modal-->
+
+
+                </div>
+            </div>
+            <div class="details-container" id="details">
+                <h3 id="details-title">{{ meeting.title }}</h3>
+                <p id="details-content">Select an item from the list to see more details here.</p>
+            </div>
+
+            <!--Modal-->
                         <div class="modal fade" id="contentDetail">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -58,13 +67,6 @@
                             </div>
                           </div>
                         </div>
-
-                </div>
-            </div>
-            <div class="details-container" id="details">
-                <h3 id="details-title">{{ meeting.title }}</h3>
-                <p id="details-content">Select an item from the list to see more details here.</p>
-            </div>
         </div>
 
 
