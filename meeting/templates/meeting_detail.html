@@ -42,8 +42,10 @@
   </div>
   <br />
   <div id="meetingContentJson">
-        {% for minute in meeting.content.minutes %}
-            <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
-        {% endfor %}
+        {% if meeting.content.minutes %}
+          {% for minute in meeting.content.minutes %}
+              <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
+          {% endfor %}
+        {% endif %}
   </div>
 </div>
