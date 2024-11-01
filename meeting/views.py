@@ -13,6 +13,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+from dotenv import load_dotenv
 
 
 def login_view(request):
@@ -152,9 +154,23 @@ def save_audio(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+load_dotenv()
+
+API_KEY = os.getenv('API_KEY')
+
+
+def verify_api_key(request):
+    api_key = request.data['api_key']
+    return api_key == API_KEY
+
+
 @api_view(['PATCH'])
+@permission_classes([AllowAny])
 @csrf_exempt
 def store_meeting_detail(request):
+    if not verify_api_key(request):
+        return Response({'error': 'Forbidden: Invalid API Key'}, status=403)
+
     meeting_id = request.data['meeting_id']
     meeting = Meeting.objects.get(id=meeting_id)
     meeting.content = request.data['content']
@@ -164,9 +180,13 @@ def store_meeting_detail(request):
 
 
 @api_view(['PATCH'])
+@permission_classes([AllowAny])
 @csrf_exempt
 def store_meeting_summary(request):
-    meeting_id = request.data['id']
+    if not verify_api_key(request):
+        return Response({'error': 'Forbidden: Invalid API Key'}, status=403)
+
+    meeting_id = request.data['meeting_id']
     meeting = Meeting.objects.get(id=meeting_id)
     meeting.summary = request.data['summary']
     meeting.save()

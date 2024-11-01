@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-*)(g=kg1xd1mlt#qnb+hwwng)!gh3+_*#mw(woz_^b8d^487uy
 # Debug가 True일 경우 웹 정보가 그대로 화면에 출력됨 --> False로 변경
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -154,10 +154,8 @@ AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
-
-
-
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (
+    AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
 
 
 # Password validation
