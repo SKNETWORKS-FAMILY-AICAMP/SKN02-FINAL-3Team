@@ -137,5 +137,22 @@
     }
   });
 
+function updateOptions() {
+    const selects = document.querySelectorAll('select[name="selectedValues"]');
+    const selectedValues = Array.from(selects)
+        .map(select => select.value)  // 각 select 요소의 선택된 값을 배열로 추출
+        .filter(value => value !== "-- 선택 --"); // 초기 선택 무시
+
+    selects.forEach(select => {
+        Array.from(select.options).forEach(option => {
+            if (selectedValues.includes(option.value) && option.value !== select.value) {
+                option.hidden = true;  // 선택된 값은 숨김 처리
+            } else {
+                option.hidden = false;  // 선택되지 않은 값은 표시
+            }
+        });
+    });
+}
+
 </script>
 {% endblock %}
