@@ -12,6 +12,7 @@ urlpatterns = [
     path('meeting_summary/<int:meeting_id>/', views.meeting_summary, name='meeting_summary'),
     path('save_audio', views.save_audio, name='save_audio'),
     path('meeting_detail/<int:meeting_id>/', views.detail_view, name='detail'),
+    path('speaker', views.speaker_modify, name='speaker'),
 ]
 
 handler400 = "meeting.views.bad_request"
