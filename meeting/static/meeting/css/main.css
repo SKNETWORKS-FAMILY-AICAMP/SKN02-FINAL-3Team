@@ -76,3 +76,6 @@
 .create-meeting:hover {
   background-color: #d0e4ff;
 }
+#meetingDetailModal {
+  max-width: 65%;
+}

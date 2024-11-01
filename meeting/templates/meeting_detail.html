@@ -1,5 +1,3 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'meeting/css/meeting_detail.css' %}?after" media="screen">
 <div class="modal-header">
   <h5 class="modal-title">{{ meeting.title }} 전문 보기</h5>
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -30,12 +28,12 @@
         </div>
       </div>
 
-
     </div>
   </div>
   <br />
-  <br />
+  <div id="meetingContentJson">
         {% for minute in meeting.content.minutes %}
             <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
         {% endfor %}
+  </div>
 </div>
