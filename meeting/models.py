@@ -12,7 +12,7 @@ class Meeting(models.Model):
     file_path = models.FileField(upload_to='recordings/')
     host = models.ForeignKey(User, on_delete=models.CASCADE)
     summary = models.TextField()
-    content = models.TextField()
+    content = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return str(self.id)

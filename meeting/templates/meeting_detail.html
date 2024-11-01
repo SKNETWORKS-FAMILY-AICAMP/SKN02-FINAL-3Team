@@ -1,46 +1,41 @@
-<!DOCTYPE html>
 {% load static %}
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회의 요약</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'meeting/css/meeting.css' %}?after">
-  </head>
-  <body>
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <span>{{ meeting.title }}</span>
-        <span>{{ meeting.started_at|date:"Y-m-d H:i" }} 작성자 {{ meeting.host }}</span>
-      </div>
-      <div class="card-body">
-        <p>
-          <strong>참여자</strong><br />
+<link rel="stylesheet" href="{% static 'meeting/css/meeting_detail.css' %}?after" media="screen">
+<div class="modal-header">
+  <h5 class="modal-title">{{ meeting.title }} 전문 보기</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body" id="modalBody">
+  <!--accordion-->
+
+  <div class="accordion" id="speakerSelect">
+    <div class="accordion-item">
+
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="False" aria-controls="collapseOne">
+          Speaker select
+        </button>
+      </h2>
+
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
+        <div class="accordion-body">
           {% for user in users %}
-            {{user}}
+            <select id="speaker{{ forloop.counter }}" name="speaker{{ forloop.counter }}">
+              <option selected>Select Email</option>
+              {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+              {% endfor %}
+            </select>
+          <br />
           {% endfor %}
-        </p>
-        <p>
-          <strong>확인자</strong><br />
-          {% for checkeruser in checkerusers %}
-            {% checkeruser %}}
-          {% endfor %}
-        </p>
-
-        <p><strong>회의 전문</strong></p>
-        <p>{{meeting.content}}</p>
-        <br>
-
+        </div>
       </div>
+
 
     </div>
-  </body>
-</html>
+  </div>
+  <br />
+  <br />
+        {% for minute in meeting.content.minutes %}
+            <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
+        {% endfor %}
+</div>

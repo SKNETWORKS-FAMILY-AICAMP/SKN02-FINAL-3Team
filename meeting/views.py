@@ -68,8 +68,9 @@ def detail_view(request, meeting_id):
     checkers_id = Participant.objects.filter(
         meeting_id=meeting_id, is_checker=True).values_list('user_id', flat=True)
     # 3. 모든 참가자의 User 객체 가져오기
-    users = User.objects.filter(id__in=participants).values_list(
-        'email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    users = User.objects.filter(id__in=participants).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    print(users.count())
+
     # 4. Checker 역할인 참가자의 User 객체 가져오기
     checkerusers = User.objects.filter(id__in=checkers_id).values_list(
         'email', flat=True).distinct()  # 중복된 values_list 호출 제거
@@ -121,34 +122,31 @@ def save_audio(request):
             audio_file = request.FILES['audio']
 
             # 파일을 S3에 업로드하고, 업로드된 S3 경로를 DB에 저장
-            result = s3_client.upload(
-                file=audio_file, file_name=filename, bucket_name=bucket_name)
-            print(result)
+
+            s3_client.upload(file=audio_file, file_name=filename, bucket_name=bucket_name)
 
             # Meeting 객체에 S3 경로 저장
             meeting = Meeting.objects.get(id=meeting.id)
             meeting.file_path = s3_file_path  # S3 파일 경로를 DB에 저장
-            meeting._do_update()
+            meeting.save()
 
             user_email = request.user.email
-            attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
+
+            attendees = request.POST.getlist('attendees[]') # 리스트로 받음
+
             if user_email not in attendees:
                 attendees.append(user_email)
-
             print(attendees)
+
             checkers = request.POST.getlist('checkers[]')
             print(checkers)
-            for attendee in attendees:
-                for checker in checkers:
-                    if checker == attendee:
-                        Participant.objects.create(
-                            meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    elif checker != attendee:
-                        Participant.objects.create(
-                            meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                    else:
-                        continue
 
+
+            for attendee in attendees:
+                if attendee in checkers:
+                    Participant.objects.create(meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                else:
+                    Participant.objects.create(meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
             return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
