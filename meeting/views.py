@@ -62,10 +62,12 @@ def detail_view(request, meeting_id):
     print(users.count())
     # 4. Checker 역할인 참가자의 User 객체 가져오기
     checkerusers = User.objects.filter(id__in=checkers_id).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
-
-    speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
-    sorted_speakers = sorted(speakers_list)
-    sorted_speakers.remove("알 수 없음")
+    if meeting.content == None:
+        sorted_speakers = []
+    else :
+        speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
+        sorted_speakers = sorted(speakers_list)
+        sorted_speakers.remove("알 수 없음")
 
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
