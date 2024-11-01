@@ -7,6 +7,7 @@
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'meeting/css/main.css' %}?after" media="screen">
 <link rel="stylesheet" href="{% static 'meeting/css/meeting.css' %}?after">
+<link rel="stylesheet" href="{% static 'meeting/css/meeting_detail.css' %}?after" media="screen">
 {% endblock %}
 
 
@@ -50,7 +51,7 @@
 
   <!--Modal-->
   <div class="modal fade" id="contentDetail">
-    <div class="modal-dialog">
+    <div class="modal-dialog" id="meetingDetailModal">
       <div class="modal-content" id="contentModalHtml">
       </div>
     </div>
