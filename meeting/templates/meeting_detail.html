@@ -1,7 +1,41 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'meeting/css/meeting_detail.css' %}?after" media="screen">
 <div class="modal-header">
   <h5 class="modal-title">{{ meeting.title }} 전문 보기</h5>
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body" id="modalBody">
-  {{ meeting.content }}
+  <!--accordion-->
+
+  <div class="accordion" id="speakerSelect">
+    <div class="accordion-item">
+
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="False" aria-controls="collapseOne">
+          Speaker select
+        </button>
+      </h2>
+
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
+        <div class="accordion-body">
+          {% for user in users %}
+            <select id="speaker{{ forloop.counter }}" name="speaker{{ forloop.counter }}">
+              <option selected>Select Email</option>
+              {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+              {% endfor %}
+            </select>
+          <br />
+          {% endfor %}
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <br />
+  <br />
+        {% for minute in meeting.content.minutes %}
+            <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
+        {% endfor %}
 </div>
