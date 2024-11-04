@@ -13,14 +13,12 @@ urlpatterns = [
          views.meeting_summary, name='meeting_summary'),
     path('save_audio', views.save_audio, name='save_audio'),
     path('meeting_detail/<int:meeting_id>/', views.detail_view, name='detail'),
-
     path('meeting/detail', views.store_meeting_detail,
          name='store_meeting_detail'),
     path('meeting/summary', views.store_meeting_summary,
          name='store_meeting_summary'),
     path('search/', views.search_meetings,
          name='search_meetings'),  # 검색 엔드포인트 추가
-
     path('speaker', views.speaker_modify, name='speaker'),
 
 ]
