@@ -21,7 +21,7 @@
     <p>{{ meeting.summary|safe }}</p>
     <br>
     <div class="detailMeeting">
-      <button type="button" id="open-modal" class="btn" data-bs-toggle="modal" data-bs-target="#contentDetail">전문
+      <button type="button" id="open-modal" class="btn" data-bs-toggle="modal" data-bs-target="#contentDetail" data-meeting-id="{{ meeting.id }}">전문
         보기</button>
     </div>
 

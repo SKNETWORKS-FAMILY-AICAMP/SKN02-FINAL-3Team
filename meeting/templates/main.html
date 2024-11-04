@@ -55,7 +55,7 @@
   </div>
 
   <!--Modal-->
-  <div class="modal fade" id="contentDetail">
+  <div class="modal fade" id="contentDetail" >
     <div class="modal-dialog" id="meetingDetailModal">
       <div class="modal-content" id="contentModalHtml">
       </div>
@@ -96,7 +96,6 @@
         fetch(`/meeting_detail/${meeting_id}`)
           .then(response => response.text())
           .then(html => {
-            console.log(html)
             modalContainer.innerHTML = html;
           });
     }
@@ -104,11 +103,16 @@
 
 
 
-function updateOptions() {
+
+let selected_speakers = [];  // 선택된 값들을 저장할 리스트
+  function updateOptions() {
     const selects = document.querySelectorAll('select[name="selectedValues"]');
     const selectedValues = Array.from(selects)
         .map(select => select.value)  // 각 select 요소의 선택된 값을 배열로 추출
         .filter(value => value !== "-- 선택 --"); // 초기 선택 무시
+
+    // 선택된 값들을 selected_speakers에 저장
+    selected_speakers = selectedValues;
 
     selects.forEach(select => {
         Array.from(select.options).forEach(option => {
@@ -119,7 +123,44 @@ function updateOptions() {
             }
         });
     });
-}
+    console.log("Selected speakers:", selected_speakers)
+  }
+
+
+  async function updateDetails(meeting_id) {
+    console.log(selected_speakers)
+
+    const modalContainer = document.getElementById('contentModalHtml');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData();
+
+    formData.append('meeting_id', meeting_id)
+    formData.append('selected_speakers', JSON.stringify(selected_speakers));
+
+    try {
+          const response = await fetch("{% url 'speaker' %}", { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
+              method: 'POST',
+              body: formData,
+              headers: {
+                  'X-CSRFToken': csrfToken
+              }
+          })
+          .then(() => {
+            fetch(`/meeting_detail/${meeting_id}`)
+            .then(response => response.text())
+            .then(html => {
+              modalContainer.innerHTML = html;
+            });
+          })
+          .catch(() => {
+            console.log("Speaker 전송 중에 오류가 생겼습니다.")
+          })
+    }
+    catch (fetchError) {
+      console.error('Speaker 수정 전체 과정 중 오류가 발생했습니다:', fetchError);
+    }
+
+  }
 
 </script>
 
