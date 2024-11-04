@@ -13,27 +13,29 @@
 
 {% block contents %}
 <div class="meeting-list">
-  <!-- 드롭다운 메뉴와 검색 입력 -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <div class="dropdown">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
-      검색 유형 선택
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#" data-search-type="title">제목</a>
-      <a class="dropdown-item" href="#" data-search-type="author">작성자</a>
-      <a class="dropdown-item" href="#" data-search-type="date">날짜</a>
-    </div>
-  </div>
-  <div class="input-group">
-    <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-primary meeting-search-button">검색</button>
-  </div>
-</div>
-
 
   <div class="list-container" id="list-container">
+      <!-- 드롭다운 메뉴와 검색 입력 -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          검색 유형 선택
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#" data-search-type="title">제목</a>
+          <a class="dropdown-item" href="#" data-search-type="author">작성자</a>
+          <a class="dropdown-item" href="#" data-search-type="date">날짜</a>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary meeting-search-button">검색</button>
+      </div>
+    </div>
+
+
+
     <div class="create-meeting">
       <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
     </div>
