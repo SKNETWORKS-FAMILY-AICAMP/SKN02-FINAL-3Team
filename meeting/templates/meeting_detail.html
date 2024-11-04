@@ -16,15 +16,25 @@
 
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
         <div class="accordion-body">
-          {% for user in users %}
-            <select id="speaker{{ forloop.counter }}" name="speaker{{ forloop.counter }}">
-              <option selected>Select Email</option>
-              {% for user in users %}
-                <option value="{{ user }}">{{ user }}</option>
-              {% endfor %}
-            </select>
-          <br />
-          {% endfor %}
+          <form action="{% url 'speaker' %}" method="POST">
+            {% csrf_token %}
+            {% for speaker in speakers %}
+              <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions()">
+                <option selected>{{ speaker }}</option>
+                {% for user in users %}
+                  {% if user != speaker %}
+                    <option value="{{ user }}">{{ user }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            <br />
+            {% endfor %}
+
+            <div class="btn-container align-content-end" style="text-align: end;">
+              <button class="btn btn-primary" type="submit">수정</button>
+            </div>
+
+          </form>
         </div>
       </div>
 
@@ -32,8 +42,10 @@
   </div>
   <br />
   <div id="meetingContentJson">
-        {% for minute in meeting.content.minutes %}
-            <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
-        {% endfor %}
+        {% if meeting.content.minutes %}
+          {% for minute in meeting.content.minutes %}
+              <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
+          {% endfor %}
+        {% endif %}
   </div>
 </div>
