@@ -1,12 +1,16 @@
+from logging import setLoggerClass
+from select import select
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.conf import settings
+from django.utils.log import log_response
 from django.views.decorators.csrf import csrf_exempt
 from pycparser.c_ast import Continue
 
 from .models import Meeting, Participant, User
 from .storage import S3Client
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import os
 import json
 import markdown
@@ -77,19 +81,34 @@ def detail_view(request, meeting_id):
         'email', flat=True).distinct()  # 중복된 values_list 호출 제거
     print(users.count())
     # 4. Checker 역할인 참가자의 User 객체 가져오기
-    checkerusers = User.objects.filter(id__in=checkers_id).values_list(
-        'email', flat=True).distinct()  # 중복된 values_list 호출 제거
+
+    checkerusers = User.objects.filter(id__in=checkers_id).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    if meeting.content == None:
+        sorted_speakers = []
+    else :
+        speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
+        sorted_speakers = sorted(speakers_list)
+        sorted_speakers.remove("알 수 없음")
+
 
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
         'users': users,
-        'checkerusers': checkerusers
+        'checkerusers': checkerusers,
+        'speakers': sorted_speakers
     })
+
+
+def speaker_modify(request):
+    if request.method == 'POST':
+        selected_values = request.POST.getlist('selectedValues')  # 선택된 값을 배열로 가져옴
+        print(selected_values)
+        return JsonResponse({'message': selected_values }, status=200)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
-
 
 @csrf_exempt
 def save_audio(request):
