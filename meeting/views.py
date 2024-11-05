@@ -17,6 +17,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
+import requests
+
+load_dotenv()
 
 
 def login_view(request):
@@ -137,6 +140,25 @@ def save_audio(request):
             attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
             if user_email not in attendees:
                 attendees.append(user_email)
+
+            # 모델 서버에 전송
+            url = str(os.getenv('MODEL_SERVER_URL'))
+            payload = {
+                "meeting_id": meeting.id,
+                "audio_url": s3_file_path,
+                "num_of_person": len(attendees),
+            }
+            headers = {
+                'Content-Type': 'application/json',
+                # 필요한 경우 CSRF 토큰이나 인증 헤더 추가
+            }
+            try:
+                response = requests.post(url, json=payload, headers=headers)
+                response.raise_for_status()  # 요청이 성공했는지 확인
+
+            except requests.exceptions.RequestException as e:
+                print(f"POST 요청 중 오류 발생: {e}")
+
             print(attendees)
 
             checkers = request.POST.getlist('checkers[]')
@@ -154,8 +176,6 @@ def save_audio(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
-load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
 
