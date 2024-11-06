@@ -163,3 +163,4 @@ cython_debug/
 
 /record
 .pem
+etc/ssl/certs/global-bundle.pem
