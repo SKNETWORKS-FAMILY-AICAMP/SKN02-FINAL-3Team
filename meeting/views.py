@@ -21,9 +21,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
-import requests
 
-load_dotenv()
+import requests
 
 
 def login_view(request):
@@ -82,15 +81,16 @@ def detail_view(request, meeting_id):
     print(users.count())
     # 4. Checker 역할인 참가자의 User 객체 가져오기
 
-    checkerusers = User.objects.filter(id__in=checkers_id).values_list('email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    checkerusers = User.objects.filter(id__in=checkers_id).values_list(
+        'email', flat=True).distinct()  # 중복된 values_list 호출 제거
     if meeting.content == None:
         sorted_speakers = []
-    else :
-        speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
+    else:
+        speakers_list = list({context['speaker']
+                             for context in meeting.content['minutes']})
         sorted_speakers = sorted(speakers_list)
         sorted_speakers.remove("알 수 없음")
-
-
+    print(users)
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
         'users': users,
@@ -101,14 +101,16 @@ def detail_view(request, meeting_id):
 
 def speaker_modify(request):
     if request.method == 'POST':
-        selected_values = request.POST.getlist('selectedValues')  # 선택된 값을 배열로 가져옴
+        selected_values = request.POST.getlist(
+            'selectedValues')  # 선택된 값을 배열로 가져옴
         print(selected_values)
-        return JsonResponse({'message': selected_values }, status=200)
+        return JsonResponse({'message': selected_values}, status=200)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 # 상대 경로 설정
 RECORD_DIR = os.path.join(settings.BASE_DIR, 'record')
+
 
 @csrf_exempt
 def save_audio(request):
@@ -159,6 +161,9 @@ def save_audio(request):
             attendees = request.POST.getlist('attendees[]')  # 리스트로 받음
             if user_email not in attendees:
                 attendees.append(user_email)
+            print(attendees)
+            s3_file_path = settings.AWS_S3_CUSTOM_DOMAIN + '/' + s3_file_path
+            print(s3_file_path)
 
             # 모델 서버에 전송
             url = str(os.getenv('MODEL_SERVER_URL'))
@@ -172,13 +177,12 @@ def save_audio(request):
                 # 필요한 경우 CSRF 토큰이나 인증 헤더 추가
             }
             try:
+
                 response = requests.post(url, json=payload, headers=headers)
                 response.raise_for_status()  # 요청이 성공했는지 확인
 
             except requests.exceptions.RequestException as e:
                 print(f"POST 요청 중 오류 발생: {e}")
-
-            print(attendees)
 
             checkers = request.POST.getlist('checkers[]')
             print(checkers)
@@ -195,6 +199,8 @@ def save_audio(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+
+load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
 

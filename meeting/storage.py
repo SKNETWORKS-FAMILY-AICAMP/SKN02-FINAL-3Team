@@ -1,11 +1,12 @@
 import boto3
 
+
 class S3Client():
     def __init__(self, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY):
         self.s3 = boto3.client(
             's3',
-            aws_access_key_id = AWS_ACCESS_KEY_ID,
-            aws_secret_access_key = AWS_SECRET_ACCESS_KEY
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY
         )
         self.base = 'record/'
 
@@ -17,8 +18,9 @@ class S3Client():
             file,
             bucket_name,
             self.base + file_name,
-            ExtraArgs = {
-                'ContentType': file.content_type
+            ExtraArgs={
+                'ContentType': file.content_type,
+                'ACL': 'public-read'
             }
         )
 

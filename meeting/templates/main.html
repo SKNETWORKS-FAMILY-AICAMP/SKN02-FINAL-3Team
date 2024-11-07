@@ -13,27 +13,29 @@
 
 {% block contents %}
 <div class="meeting-list">
-  <!-- 드롭다운 메뉴와 검색 입력 -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <div class="dropdown">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
-      검색 유형 선택
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#" data-search-type="title">제목</a>
-      <a class="dropdown-item" href="#" data-search-type="author">작성자</a>
-      <a class="dropdown-item" href="#" data-search-type="date">날짜</a>
-    </div>
-  </div>
-  <div class="input-group">
-    <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-primary meeting-search-button">검색</button>
-  </div>
-</div>
-
 
   <div class="list-container" id="list-container">
+      <!-- 드롭다운 메뉴와 검색 입력 -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          검색 유형 선택
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#" data-search-type="title">제목</a>
+          <a class="dropdown-item" href="#" data-search-type="author">작성자</a>
+          <a class="dropdown-item" href="#" data-search-type="date">날짜</a>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary meeting-search-button">검색</button>
+      </div>
+    </div>
+
+
+
     <div class="create-meeting">
       <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
     </div>
@@ -55,7 +57,7 @@
   </div>
 
   <!--Modal-->
-  <div class="modal fade" id="contentDetail">
+  <div class="modal fade" id="contentDetail" >
     <div class="modal-dialog" id="meetingDetailModal">
       <div class="modal-content" id="contentModalHtml">
       </div>
@@ -96,7 +98,6 @@
         fetch(`/meeting_detail/${meeting_id}`)
           .then(response => response.text())
           .then(html => {
-            console.log(html)
             modalContainer.innerHTML = html;
           });
     }
@@ -104,11 +105,16 @@
 
 
 
-function updateOptions() {
+
+let selected_speakers = [];  // 선택된 값들을 저장할 리스트
+  function updateOptions() {
     const selects = document.querySelectorAll('select[name="selectedValues"]');
     const selectedValues = Array.from(selects)
         .map(select => select.value)  // 각 select 요소의 선택된 값을 배열로 추출
         .filter(value => value !== "-- 선택 --"); // 초기 선택 무시
+
+    // 선택된 값들을 selected_speakers에 저장
+    selected_speakers = selectedValues;
 
     selects.forEach(select => {
         Array.from(select.options).forEach(option => {
@@ -119,7 +125,44 @@ function updateOptions() {
             }
         });
     });
-}
+    console.log("Selected speakers:", selected_speakers)
+  }
+
+
+  async function updateDetails(meeting_id) {
+    console.log(selected_speakers)
+
+    const modalContainer = document.getElementById('contentModalHtml');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData();
+
+    formData.append('meeting_id', meeting_id)
+    formData.append('selected_speakers', JSON.stringify(selected_speakers));
+
+    try {
+          const response = await fetch("{% url 'speaker' %}", { // POST 경로를 'save_audio' 로 변경하였습니다. 실제 경로는 서버 설정에 따릅니다.
+              method: 'POST',
+              body: formData,
+              headers: {
+                  'X-CSRFToken': csrfToken
+              }
+          })
+          .then(() => {
+            fetch(`/meeting_detail/${meeting_id}`)
+            .then(response => response.text())
+            .then(html => {
+              modalContainer.innerHTML = html;
+            });
+          })
+          .catch(() => {
+            console.log("Speaker 전송 중에 오류가 생겼습니다.")
+          })
+    }
+    catch (fetchError) {
+      console.error('Speaker 수정 전체 과정 중 오류가 발생했습니다:', fetchError);
+    }
+
+  }
 
 </script>
 

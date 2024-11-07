@@ -13,13 +13,13 @@
           Speaker select
         </button>
       </h2>
-
+    
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
         <div class="accordion-body">
-          <form action="{% url 'speaker' %}" method="POST">
+            
             {% csrf_token %}
             {% for speaker in speakers %}
-              <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions()">
+              <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions('{{ meeting.id }}')">
                 <option selected>{{ speaker }}</option>
                 {% for user in users %}
                   {% if user != speaker %}
@@ -31,10 +31,10 @@
             {% endfor %}
 
             <div class="btn-container align-content-end" style="text-align: end;">
-              <button class="btn btn-primary" type="submit">수정</button>
+              <button class="btn btn-primary" type="submit" onclick="updateDetails('{{ meeting.id }}')">수정</button>
             </div>
 
-          </form>
+
         </div>
       </div>
 
@@ -49,3 +49,6 @@
         {% endif %}
   </div>
 </div>
+<script>
+
+</script>
