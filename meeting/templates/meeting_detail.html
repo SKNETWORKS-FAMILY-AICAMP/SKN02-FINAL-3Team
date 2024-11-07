@@ -13,10 +13,9 @@
           Speaker select
         </button>
       </h2>
-
+    
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
         <div class="accordion-body">
-
             {% csrf_token %}
             {% for speaker in speakers %}
               <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions('{{ meeting.id }}')">
