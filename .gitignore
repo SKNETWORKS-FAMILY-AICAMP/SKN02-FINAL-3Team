@@ -162,3 +162,5 @@ cython_debug/
 #.idea/
 
 /record
+.pem
+etc/ssl/certs/global-bundle.pem
