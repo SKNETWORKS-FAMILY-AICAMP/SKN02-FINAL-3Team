@@ -33,8 +33,7 @@ def index(request):
     if request.user.is_authenticated:
         user = request.user
         meetings = Meeting.objects.filter(
-            participant__user=user).order_by('-started_at').distinct()[:]
-
+            participant__user=user).order_by('-started_at').distinct()[:15]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
     else:
         return redirect('login')
