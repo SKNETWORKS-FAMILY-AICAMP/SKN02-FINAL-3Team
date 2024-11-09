@@ -78,7 +78,7 @@ def detail_view(request, meeting_id):
     # 3. 모든 참가자의 User 객체 가져오기
     users = User.objects.filter(id__in=participants).values_list(
         'email', flat=True).distinct()  # 중복된 values_list 호출 제거
-    print(users.count())
+
     # 4. Checker 역할인 참가자의 User 객체 가져오기
 
     checkerusers = User.objects.filter(id__in=checkers_id).values_list(
@@ -91,8 +91,9 @@ def detail_view(request, meeting_id):
         sorted_speakers = sorted(speakers_list)
         if "Unknown" in sorted_speakers:
             sorted_speakers.remove("Unknown")
+        elif "알 수 없음" in sorted_speakers:
+            sorted_speakers.remove("알 수 없음")
 
-    print(users)
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
         'users': users,
@@ -103,9 +104,45 @@ def detail_view(request, meeting_id):
 
 def speaker_modify(request):
     if request.method == 'POST':
-        selected_values = request.POST.getlist(
-            'selectedValues')  # 선택된 값을 배열로 가져옴
-        print(selected_values)
+        meeting = Meeting.objects.get(pk=request.POST['meeting_id'])
+        selected_values_str= request.POST.get('selected_speakers')
+        selected_values = json.loads(selected_values_str) # 선택된 값을 배열로 가져옴
+
+        if "Unknown" in selected_values:
+            selected_values.remove("Unknown")
+        elif "알 수 없음" in selected_values:
+            selected_values.remove("알 수 없음")
+
+        # 이메일 주소에 맞는 사용자 검색 및 이름 리스트에 추가
+        user_name_list = []
+        for speaker in selected_values:
+            user = User.objects.filter(email=speaker)
+            # QuerySet에서 이름을 추출하여 리스트에 추가
+            for user in user.values_list('last_name', 'first_name'):
+                user_name_list.append(f"{user[0]}{user[1]}")  # 성과 이름을 결합하여 추가
+        print(type(selected_values),selected_values)
+        print(user_name_list)
+        speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
+        sorted_speakers = sorted(speakers_list)
+        print(sorted_speakers) #해결
+        if "Unknown" in sorted_speakers:
+            sorted_speakers.remove("Unknown")
+        elif "알 수 없음" in sorted_speakers:
+            sorted_speakers.remove("알 수 없음")
+        print(sorted_speakers) # 해결
+
+        for context in meeting.content['minutes']:
+            speaker = context["speaker"]
+            if speaker == "Unknown" or speaker == "알 수 없음" : continue
+
+            idx = sorted_speakers.index(speaker)
+            print(idx, speaker)
+            new_speaker = user_name_list[idx]
+            print(new_speaker)
+            context["speaker"] = new_speaker
+
+        meeting.save()
+
         return JsonResponse({'message': selected_values}, status=200)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
