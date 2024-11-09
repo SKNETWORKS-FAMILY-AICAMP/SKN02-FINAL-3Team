@@ -132,9 +132,14 @@ def speaker_modify(request):
         print(sorted_speakers) # 해결
 
         for context in meeting.content['minutes']:
-            for i, speaker in enumerate(sorted_speakers):
-                if context["speaker"] == speaker:
-                    context['speaker'] = user_name_list[i]
+            speaker = context["speaker"]
+            if speaker == "Unknown" or speaker == "알 수 없음" : continue
+
+            idx = sorted_speakers.index(speaker)
+            print(idx, speaker)
+            new_speaker = user_name_list[idx]
+            print(new_speaker)
+            context["speaker"] = new_speaker
 
         meeting.save()
 
