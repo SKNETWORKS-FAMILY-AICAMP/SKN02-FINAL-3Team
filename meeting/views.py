@@ -89,8 +89,8 @@ def detail_view(request, meeting_id):
         speakers_list = list({context['speaker']
                              for context in meeting.content['minutes']})
         sorted_speakers = sorted(speakers_list)
-        if "알 수 없음" in sorted_speakers:
-            sorted_speakers.remove("알 수 없음")
+        if "Unknown" in sorted_speakers:
+            sorted_speakers.remove("Unknown")
 
     print(users)
     return render(request, 'meeting_detail.html', {
