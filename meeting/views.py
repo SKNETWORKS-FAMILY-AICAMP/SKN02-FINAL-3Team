@@ -33,7 +33,7 @@ def index(request):
     if request.user.is_authenticated:
         user = request.user
         meetings = Meeting.objects.filter(
-            participant__user=user).order_by('-started_at').distinct()[:15]
+            participant__user=user).order_by('-started_at').distinct()[:]
         return render(request, 'main.html', {'meetings': meetings, 'user': request.user})
     else:
         return redirect('login')
@@ -89,7 +89,9 @@ def detail_view(request, meeting_id):
         speakers_list = list({context['speaker']
                              for context in meeting.content['minutes']})
         sorted_speakers = sorted(speakers_list)
-        sorted_speakers.remove("알 수 없음")
+        if "알 수 없음" in sorted_speakers:
+            sorted_speakers.remove("알 수 없음")
+
     print(users)
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
