@@ -94,6 +94,7 @@ def detail_view(request, meeting_id):
         elif "알 수 없음" in sorted_speakers:
             sorted_speakers.remove("알 수 없음")
 
+
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
         'users': users,

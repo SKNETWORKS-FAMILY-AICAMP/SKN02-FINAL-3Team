@@ -5,47 +5,57 @@
 <div class="modal-body" id="modalBody">
   <!--accordion-->
 
+  {% if meeting.content %}
   <div class="accordion" id="speakerSelect">
+
     <div class="accordion-item">
 
       <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="False" aria-controls="collapseOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+          aria-expanded="False" aria-controls="collapseOne">
           Speaker select
         </button>
       </h2>
-    
-      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#speakerSelect">
-        <div class="accordion-body">
-            {% csrf_token %}
-            {% for speaker in speakers %}
-              <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions('{{ meeting.id }}')">
-                <option selected>{{ speaker }}</option>
-                {% for user in users %}
-                  {% if user != speaker %}
-                    <option value="{{ user }}">{{ user }}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-            <br />
-            {% endfor %}
 
-            <div class="btn-container align-content-end" style="text-align: end;">
-              <button class="btn btn-primary" type="submit" onclick="updateDetails('{{ meeting.id }}')">수정</button>
-            </div>
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+        data-bs-parent="#speakerSelect">
+        <div class="accordion-body">
+          {% csrf_token %}
+          {% for speaker in speakers %}
+          <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions('{{ meeting.id }}')">
+            <option selected>{{ speaker }}</option>
+            {% for user in users %}
+            {% if user != speaker %}
+            <option value="{{ user }}">{{ user }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <br />
+          {% endfor %}
+
+          <div class="btn-container align-content-end" style="text-align: end;">
+            <button class="btn btn-primary" type="submit" onclick="updateDetails('{{ meeting.id }}')">수정</button>
+          </div>
 
 
         </div>
       </div>
 
     </div>
+
   </div>
+  {% endif %}
   <br />
   <div id="meetingContentJson">
-        {% if meeting.content.minutes %}
-          {% for minute in meeting.content.minutes %}
-              <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
-          {% endfor %}
-        {% endif %}
+    {% if not meeting.content %}
+    <h4 class="text-center">회의록 생성 중입니다...</h4>
+
+
+    {% elif meeting.content.minutes %}
+    {% for minute in meeting.content.minutes %}
+    <p><strong>{{ minute.speaker }}:</strong> {{ minute.text }}</p>
+    {% endfor %}
+    {% endif %}
   </div>
 </div>
 <script>
