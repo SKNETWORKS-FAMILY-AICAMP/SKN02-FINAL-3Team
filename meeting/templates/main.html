@@ -18,9 +18,9 @@
       <!-- 드롭다운 메뉴와 검색 입력 -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          검색 유형 선택
+        <button class="btn btn-light dropdown-toggle " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" >
+          제목
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="#" data-search-type="title">제목</a>
@@ -36,8 +36,8 @@
 
 
 
-    <div class="create-meeting">
-      <a class="nav-link" href="{% url 'recording' %}">+ 새 회의 만들기</a>
+    <div class="create-meeting" onclick="location.href='/recording/';" style="cursor: pointer">
+      <a class="nav-link">+ 새 회의 만들기</a>
     </div>
 
     <div id="list-items">

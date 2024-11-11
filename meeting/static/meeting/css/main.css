@@ -80,3 +80,6 @@
 #meetingDetailModal {
   max-width: 65%;
 }
+#dropdownMenuButton {
+  width:100px;
+}

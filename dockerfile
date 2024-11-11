@@ -24,4 +24,4 @@ COPY . .
 EXPOSE 8080
 
 # 애플리케이션 실행 명령어
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
