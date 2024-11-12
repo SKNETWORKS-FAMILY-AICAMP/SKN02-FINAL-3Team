@@ -14,27 +14,29 @@
   </head>
   <body>
     <div class="container">
-      <div class="left-panel">
-        <div class="m-md-3">
-          <h5>AI 회의 어시스턴트</h5>
+      <div class='box'>
+        <div class='login-text m-md-3'>
+          <h4>AI 회의 어시스턴트</h4>
           <h1><strong>미팅브릿지</strong></h1>
-          <br>
-          <br>
-          <h4>회의록 생성과 회의 요약을<br /><strong>한 번에, 간편하게!</strong></h4>
+          <br/>
+          <h4>회의록 생성과 회의 요약을</h4>
+          <h4><strong>한 번에, 간편하게!</strong></h4>
+          <br/>
           <h4>지금 구글 아이디로 시작해보세요.</h4>
         </div>
+        <div class='wave -one'></div>
+        <div class='wave -two'></div>
+        <div class='wave -three'></div>
       </div>
       <div class="right-panel">
         <div class="logo">
           <img src="{% static 'images/logo.png' %}" width="50%" alt="" />
         </div>
-        <a href="{% provider_login_url 'google' %}" class="btn-google">
-          <img
-            src="{% static 'images/google_logo.png' %}"
-            alt="Google Logo"
-          />
-          Continue with Google
-        </a>
+        <form action="{% provider_login_url 'google' %}" method="POST">
+          {% csrf_token %}
+          <h5 class="text-center"><strong>로그인</strong></h5>
+          <input type="image" src="{% static 'images/google_login_button.png' %}" alt="Google Logo">
+        </form>
       </div>
     </div>
   </body>

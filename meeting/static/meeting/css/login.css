@@ -1,6 +1,6 @@
 body {
         font-family: "Noto Sans KR", sans-serif;
-        background-color: #f8f9fa;
+        /* background-color: #f8f9fa; */
         margin: 0;
         height: 100vh;
         display: flex;
@@ -10,6 +10,7 @@ body {
       .container {
         width: 100vw;
         height: 100vh;
+        max-width: 100%;
         display: flex;
         background-color: white;
         border-radius: 0;
@@ -27,11 +28,80 @@ body {
         justify-content: center;
         align-items: center;
       }
+      h1 {
+        font-size: 3rem;
+        text-shadow: 0 0 5px gray;
+      }
+      .box {
+        width: 55%;
+        height: 100%;
+        border-radius: 5px;
+        background: #fbfdff;
+        position: relative;
+        overflow: hidden;
+        transform: translate3d(0, 0, 0);
+      }
+      .wave {
+        opacity: .4;
+        position: absolute;
+        top: 0%;
+        left: -10%;
+        background: #79b3ff;
+        width: 70rem;
+        height: 70rem;
+        margin-left: -250px;
+        margin-top: -250px;
+        transform-origin: 50% 48%;
+        border-radius: 43%;
+        animation: drift 7000ms infinite linear;
+      }
+      
+      .wave.-three {
+        animation: drift 9000ms infinite linear;
+      }
+      
+      .wave.-two {
+        animation: drift 11000ms infinite linear;
+        opacity: .1;
+        background: rgb(76, 255, 180);
+      }
+      
+      .box:after {
+        content: '';
+        display: block;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(#e8a, 1), rgba(#def, 0) 80%, rgba(white, .5));
+        z-index: 11;
+        transform: translate3d(0, 0, 0);
+      }
+      
+      .login-text {
+        position: absolute;
+        left: 35%;
+        top: 25%;
+        width: 50%;
+        z-index: 1;
+        text-align: left;
+        transform: translate3d(0, 0, 0);
+        color: white;
+        /* letter-spacing: .4em; */
+        /* font-size: 24px; */
+        text-shadow: 0 1px 0 rgba(black, .1);
+        text-indent: .3em;
+      }
+      @keyframes drift {
+        from { transform: rotate(0deg); }
+        from { transform: rotate(360deg); }
+      }
       .right-panel {
-        padding: 40px;
         text-align: center;
         flex: 1;
+        padding: 0 10% 0 0;
         display: flex;
+        background: #fbfdff;
         flex-direction: column;
         justify-content: center;
         align-items: center;
