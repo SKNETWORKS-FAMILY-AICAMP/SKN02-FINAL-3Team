@@ -10,13 +10,6 @@
         {{ user }}<br />
       {% endfor %}
     </p>
-    <p>
-      <strong>확인자</strong><br />
-      {% for checkeruser in checkerusers %}
-        {{ checkeruser }}
-      {% endfor %}
-    </p>
-
     <p><strong>회의 요약</strong></p>
     <p>{{ meeting.summary|safe }}</p>
     <br>
