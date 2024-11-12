@@ -58,7 +58,7 @@ def meeting_summary(request, meeting_id):
     return render(request, 'meeting.html', {
         'meeting': meeting,
         'users': users,
-        'checkerusers': checkerusers
+        
     })
 
 
@@ -97,7 +97,6 @@ def detail_view(request, meeting_id):
     return render(request, 'meeting_detail.html', {
         'meeting': meeting,
         'users': users,
-        'checkerusers': checkerusers,
         'speakers': sorted_speakers
     })
 
@@ -223,16 +222,10 @@ def save_audio(request):
             except requests.exceptions.RequestException as e:
                 print(f"POST 요청 중 오류 발생: {e}")
 
-            checkers = request.POST.getlist('checkers[]')
-            print(checkers)
 
             for attendee in attendees:
-                if attendee in checkers:
-                    Participant.objects.create(
-                        meeting=meeting, is_checker=True, created_at=meeting.started_at, user=User.objects.get(email=attendee))
-                else:
-                    Participant.objects.create(
-                        meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
+                Participant.objects.create(
+                    meeting=meeting, is_checker=False, created_at=meeting.started_at, user=User.objects.get(email=attendee))
 
             return JsonResponse({'message': 'File uploaded successfully'}, status=200)
 

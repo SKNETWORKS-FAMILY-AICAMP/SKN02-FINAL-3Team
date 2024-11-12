@@ -38,13 +38,6 @@
                                         <div id="attendent-email-buttons" class="mt-2"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="checker_input_element" class="form-label">확인자:</label>
-                                    <div id="checker-input-container">
-                                        <input type="text" class="form-control" id="checker_input_element" placeholder="참석자 이메일을 입력 후 enter를 누르시오.">
-                                        <div id="checker-email-buttons" class="mt-2"></div>
-                                    </div>
-                                </div>
                                 <p class="modal-text">
                                     회의를 저장하시겠습니까?<br> 저장하지 않고 나가면 회의가 저장되지 않습니다.
                                 </p>
@@ -154,43 +147,6 @@
         }
     });
 
-    // 확인자 이메일 입력 처리
-    document.getElementById('checker_input_element').addEventListener('keydown', function(event) {
-        const input = event.target;
-
-        if (event.key === 'Enter') {
-            event.preventDefault(); // 기본 동작 방지
-            const email2 = input.value.trim();
-            const attendeeButtons = document.querySelectorAll('#attendent-email-buttons button');
-
-            // 참석자 목록에 입력된 이메일이 있는지 확인
-            const isAttendee = Array.from(attendeeButtons).some(button => button.textContent === email2);
-
-            if (!isAttendee) {
-                // 참석자 목록에 없으면 입력 칸 테두리를 빨간색으로 설정
-                input.style.border = '2px solid red';
-                setTimeout(() => {
-                    input.style.border = ''; // 1초 후 원래 테두리로 되돌림
-                }, 300);
-            } else if (email2) {
-                // 참석자 목록에 있을 때만 이메일 버튼 생성
-                const emailButton2 = document.createElement('button');
-                emailButton2.className = 'btn btn-outline-primary me-1 mb-1';
-                emailButton2.textContent = email2;
-
-                // 이메일 버튼 클릭 시 해당 이메일을 삭제할 수 있는 기능 추가
-                emailButton2.addEventListener('click', function() {
-                    emailButton2.remove();
-                });
-
-                // 버튼을 이메일 버튼 컨테이너에 추가
-                document.getElementById('checker-email-buttons').appendChild(emailButton2);
-
-                // 입력값 초기화하지 않음
-                input.value = ''; // 입력 필드만 초기화
-            }
-        }
-    });
 
     // 모달에서 "예" 버튼을 클릭하면 실행
     document.querySelector('#yes-button').addEventListener('click', async function() {
@@ -222,12 +178,6 @@
         const emailButtons1 = document.querySelectorAll('#attendent-email-buttons button');
         emailButtons1.forEach(button => {
             formData.append('attendees[]', button.textContent); // 버튼의 텍스트를 이메일로 추가
-        });
-
-        // 확인자 이메일 수집
-        const emailButtons2 = document.querySelectorAll('#checker-email-buttons button');
-        emailButtons2.forEach(button => {
-            formData.append('checkers[]', button.textContent); // 버튼의 텍스트를 이메일로 추가
         });
 
         formData.append('audio', audioBlob);
