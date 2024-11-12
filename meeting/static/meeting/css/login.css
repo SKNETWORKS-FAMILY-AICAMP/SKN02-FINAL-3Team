@@ -33,7 +33,7 @@ body {
         text-shadow: 0 0 5px gray;
       }
       .box {
-        width: 55%;
+        width: 60%;
         height: 100%;
         border-radius: 5px;
         background: #fbfdff;
@@ -44,13 +44,13 @@ body {
       .wave {
         opacity: .4;
         position: absolute;
-        top: 0%;
-        left: -10%;
+        top: -25vw;
+        left: -50vw;
         background: #79b3ff;
-        width: 70rem;
-        height: 70rem;
-        margin-left: -250px;
-        margin-top: -250px;
+        width: 100vw;
+        height: 100vw;
+        margin-left: 0;
+        margin-top: 0;
         transform-origin: 50% 48%;
         border-radius: 43%;
         animation: drift 7000ms infinite linear;
@@ -99,7 +99,7 @@ body {
       .right-panel {
         text-align: center;
         flex: 1;
-        padding: 0 10% 0 0;
+        padding: 0 10vh 0 0;
         display: flex;
         background: #fbfdff;
         flex-direction: column;
