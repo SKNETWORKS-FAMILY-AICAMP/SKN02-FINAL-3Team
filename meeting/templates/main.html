@@ -12,7 +12,7 @@
 
 
 {% block contents %}
-<div class="meeting-list">
+<div class="meeting-list" id="meeting-list">
 
   <div class="list-container" id="list-container">
       <!-- 드롭다운 메뉴와 검색 입력 -->
@@ -78,6 +78,7 @@
   let currentItem = null;
 
   function toggleDetails1(meeting_id) {
+    const meetingList = document.getElementById('meeting-list');
     const listContainer = document.getElementById('list-container');
     const detailsContainer = document.getElementById('details');
     const detailsContent = document.getElementById('details-content');
@@ -86,7 +87,7 @@
     if (currentItem === meeting_id) {
       // Hide the details if the same item is clicked again
       detailsContainer.classList.remove('open');
-      listContainer.classList.remove('split-view');
+      meetingList.classList.remove('split-view');
       currentItem = null;
     } else {
       // Fetch the meeting details from the server
@@ -96,7 +97,7 @@
           // Show the details of the selected item
           detailsContent.innerHTML = html;
           detailsContainer.classList.add('open');
-          listContainer.classList.add('split-view');
+          meetingList.classList.add('split-view');
           currentItem = meeting_id;
         });
         fetch(`/meeting_detail/${meeting_id}`)
