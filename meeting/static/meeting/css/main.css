@@ -32,6 +32,33 @@
   visibility: visible;
   width: 63%;
 }
+
+.details-container::-webkit-scrollbar {
+  width: 8px;
+}
+.details-container::-webkit-scrollbar-track { 
+  background-color: rgb(228, 228, 228);
+}
+.details-container::-webkit-scrollbar-thumb { 
+  background-color: #d0e4ff;
+}
+.details-container::-webkit-scrollbar-button {
+  display: none;
+}
+
+#contentDetail::-webkit-scrollbar {
+  width: 8px;
+}
+#contentDetail::-webkit-scrollbar-track { 
+  background-color: rgb(228, 228, 228);
+}
+#contentDetail::-webkit-scrollbar-thumb { 
+  background-color: #001a5192;
+}
+#contentDetail::-webkit-scrollbar-button {
+  display: none;
+}
+
 .list-item {
   display: flex;
   justify-content: space-between;
@@ -77,7 +104,7 @@
   padding: 10px;
 }
 .create-meeting:hover {
-  background-color: #d0e4ff;
+  background-color: #d0e4ffc6;
 }
 #meetingDetailModal {
   max-width: 65%;

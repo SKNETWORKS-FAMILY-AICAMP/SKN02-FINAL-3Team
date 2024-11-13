@@ -25,12 +25,11 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="#" data-search-type="title">제목</a>
           <a class="dropdown-item" href="#" data-search-type="author">작성자</a>
-          <a class="dropdown-item" href="#" data-search-type="date">날짜</a>
         </div>
       </div>
       <div class="input-group">
-        <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" class="btn btn-primary meeting-search-button">검색</button>
+        <input type="search" id="search-input" class="form-control rounded" placeholder="검색어 입력" aria-label="Search" aria-describedby="search-addon"/>
+        <button type="button" class="btn btn-primary meeting-search-button" onclick="search()">검색</button>
       </div>
     </div>
 
@@ -56,8 +55,10 @@
 
   </div>
   <div class="details-container" id="details">
-    <h3 id="details-title">{{ meeting.title }}</h3>
-    <p id="details-content">Select an item from the list to see more details here.</p>
+    <div class="d-flex flex-row-reverse">
+      <button type="button" class="btn-close m-2" aria-label="Close" onsubmit="return false" onclick="closeToggle()"></button>
+    </div>
+    <div id="details-content">Select an item from the list to see more details here.</div>
   </div>
 
   <!--Modal-->
@@ -108,10 +109,16 @@
     }
   }
 
+  function closeToggle() {
+    const meetingList = document.getElementById('meeting-list');
+    const detailsContainer = document.getElementById('details');
+    detailsContainer.classList.remove('open');
+      meetingList.classList.remove('split-view');
+      currentItem = null;
+  }
 
-
-// 수정
-let selected_speakers = [];  // 선택된 값들을 저장할 리스트
+  // 수정
+  let selected_speakers = [];  // 선택된 값들을 저장할 리스트
   function updateOptions() {
     const selects = document.querySelectorAll('select[name="selectedValues"]');
     const selectedValues = Array.from(selects)
@@ -166,96 +173,93 @@ let selected_speakers = [];  // 선택된 값들을 저장할 리스트
     catch (fetchError) {
       console.error('Speaker 수정 전체 과정 중 오류가 발생했습니다:', fetchError);
     }
-
   }
 
-</script>
+  let selectedSearchType = 'title';  // 기본 검색 유형 설정
 
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let selectedSearchType = 'title';  // 기본 검색 유형 설정
-
-    // 드롭다운 메뉴에서 검색 유형 선택 시
-    document.querySelectorAll('.dropdown-item').forEach(function (item) {
-      item.addEventListener('click', function (e) {
-        e.preventDefault();
-        selectedSearchType = this.getAttribute('data-search-type');
-        document.getElementById('dropdownMenuButton').innerText = this.innerText;
-      });
+  // 드롭다운 메뉴에서 검색 유형 선택 시
+  document.querySelectorAll('.dropdown-item').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.preventDefault();
+      selectedSearchType = this.getAttribute('data-search-type');
+      document.getElementById('dropdownMenuButton').innerText = this.innerText;
     });
+  });
 
-    // 검색 버튼 클릭 시
-    document.querySelector('.meeting-search-button').addEventListener('click', function () {
-      const query = document.getElementById('search-input').value.trim();
-
-      if (!query) {
-        alert('검색어를 입력해주세요.');
-        return;
-      }
-
-      // AJAX 요청 보내기
-      fetch('/search/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken')  // CSRF 토큰 포함
-        },
-        body: JSON.stringify({
-          'search_type': selectedSearchType,
-          'query': query
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          displaySearchResults(data.meetings);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
-
-    // 검색 결과 표시 함수
-    function displaySearchResults(meetings) {
-      const listItemsContainer = document.getElementById('list-items');
-      listItemsContainer.innerHTML = '';  // 기존 목록 초기화
-
-      if (meetings.length === 0) {
-        listItemsContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
-        return;
-      }
-
-      meetings.forEach(meeting => {
-        const meetingDiv = document.createElement('div');
-        meetingDiv.classList.add('list-item');
-        meetingDiv.setAttribute('onclick', `toggleDetails1('${meeting.id}')`);
-        meetingDiv.innerHTML = `
-          <span class="list-item-title">${meeting.title}</span>
-          <span class="list-item-info">${meeting.started_at}<br>${meeting.author}</span>
-        `;
-        listItemsContainer.appendChild(meetingDiv);
-      });
+  function search() {
+    const query = document.getElementById('search-input').value.trim();
+  
+    if (!query) {
+      alert('검색어를 입력해주세요.');
+      return;
     }
+  
+    // AJAX 요청 보내기
+    fetch('/search/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')  // CSRF 토큰 포함
+      },
+      body: JSON.stringify({
+        'search_type': selectedSearchType,
+        'query': query
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        displaySearchResults(data.meetings);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
-    // CSRF 토큰 가져오기 함수
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          // 쿠키가 name=값 형태인지 확인
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
+	let searchInput = document.getElementById('search-input');
+	searchInput.addEventListener('keyup', event => {
+    if (event.key == 'Enter') {
+      search()
     }
   });
+
+  // 검색 결과 표시 함수
+  function displaySearchResults(meetings) {
+    const listItemsContainer = document.getElementById('list-items');
+    listItemsContainer.innerHTML = '';  // 기존 목록 초기화
+
+    if (meetings.length === 0) {
+      listItemsContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
+      return;
+    }
+
+    meetings.forEach(meeting => {
+      const meetingDiv = document.createElement('div');
+      meetingDiv.classList.add('list-item');
+      meetingDiv.setAttribute('onclick', `toggleDetails1('${meeting.id}')`);
+      meetingDiv.innerHTML = `
+        <span class="list-item-title">${meeting.title}</span>
+        <span class="list-item-info">${meeting.started_at}<br>${meeting.author}</span>
+      `;
+      listItemsContainer.appendChild(meetingDiv);
+    });
+  }
+
+  // CSRF 토큰 가져오기 함수
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // 쿠키가 name=값 형태인지 확인
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
 
   $(document).ready(function() {
         var itemsToShow = 15;  // 한 번에 표시할 항목 수

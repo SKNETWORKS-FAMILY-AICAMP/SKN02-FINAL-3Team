@@ -13,7 +13,7 @@
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
           aria-expanded="False" aria-controls="collapseOne">
-          Speaker select
+          참여자 지정
         </button>
       </h2>
 
@@ -25,8 +25,8 @@
           <select class="form-select form-select-md" name="selectedValues" onchange="updateOptions('{{ meeting.id }}')">
             <option selected>{{ speaker }}</option>
             {% for user in users %}
-            {% if user != speaker %}
-            <option value="{{ user }}">{{ user }}</option>
+            {% if user.last_name != speaker %}
+            <option value="{{ user.email }}">{{ user.last_name }}{{ user.first_name }}({{ user.email }})</option>
             {% endif %}
             {% endfor %}
           </select>

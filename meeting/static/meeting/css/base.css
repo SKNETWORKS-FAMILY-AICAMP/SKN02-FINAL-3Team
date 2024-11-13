@@ -25,5 +25,19 @@ html, body {
 footer {
   background-color: #051c4f;
 }
+button:active, button:focus, input:focus {
+  outline:none !important;
+  box-shadow:none !important;}
 
-
+body::-webkit-scrollbar {
+  width: 8px;
+}
+body::-webkit-scrollbar-track { 
+  background-color: rgb(228, 228, 228);
+}
+body::-webkit-scrollbar-thumb { 
+  background-color: #001a5192;
+}
+body::-webkit-scrollbar-button {
+  display: none;
+}

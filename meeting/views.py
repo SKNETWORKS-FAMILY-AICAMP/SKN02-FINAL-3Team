@@ -76,8 +76,8 @@ def detail_view(request, meeting_id):
     checkers_id = Participant.objects.filter(
         meeting_id=meeting_id, is_checker=True).values_list('user_id', flat=True)
     # 3. 모든 참가자의 User 객체 가져오기
-    users = User.objects.filter(id__in=participants).values_list(
-        'email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    users = User.objects.filter(id__in=participants).values('last_name', 'first_name', 'email').distinct()
+    # 중복된 values_list 호출 제거
 
     # 4. Checker 역할인 참가자의 User 객체 가져오기
 
@@ -294,10 +294,10 @@ def search_meetings(request):
 
             if search_type == 'title':
                 meetings = Meeting.objects.filter(
-                    title__icontains=query, participant__user=user)
+                    title__icontains=query, participant__user=user).order_by('-started_at')
             elif search_type == 'author':
                 meetings = Meeting.objects.filter(
-                    host__email__icontains=query, participant__user=user)
+                    host__email__icontains=query, participant__user=user).order_by('-started_at')
             else:
                 return JsonResponse({'error': 'Invalid search type'}, status=400)
 
