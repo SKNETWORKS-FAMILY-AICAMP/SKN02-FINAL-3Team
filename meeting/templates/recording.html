@@ -11,11 +11,13 @@
 {% block contents %}
         <div class="recording-container">
             <div class="listening-container">
-                <img src="{% static 'images/listening.gif' %}" alt="" height="70px">
-                <div class="listening-text">&nbsp;&nbsp;Listening...</div>
+                <div id="img-container" class="text-center">
+                    <img src="{% static 'images/listening.gif' %}" alt="">
+                </div>
+                <h3 class="listening-text text-center">Listening...</h3>
             </div>
             <div class="endButton-container">
-                <button id="end-button" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
+                <button id="end-button" class="btn-lg px-5 py-3" data-bs-toggle="modal" data-bs-target="#finishModal">회의 종료</button>
             </div>
             <!-- 모달 -->
             <div class="modal" id="finishModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="finishModalLabel" >
@@ -28,22 +30,22 @@
                             <form>
                                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                                 <div class="mb-3">
-                                    <label for="title_input_element" class="form-label">제목:</label>
+                                    <label for="title_input_element" class="form-label">제목</label>
                                     <input type="text" class="form-control" id="title_input_element" name="title_input_element" placeholder="제목 입력">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="attendent_input_element" class="form-label">참석자:</label>
+                                    <label for="attendent_input_element" class="form-label">참석자</label>
                                     <div id="attendent-input-container">
                                         <input type="text" class="form-control" id="attendent_input_element" placeholder="이메일을 입력 후 enter를 누르시오.">
-                                        <div id="attendent-email-buttons" class="mt-2"></div>
+                                        <div id="attendent-email-buttons" class="mt-2 text-center"></div>
                                     </div>
                                 </div>
-                                <p class="modal-text">
+                                <p class="modal-text text-center">
                                     회의를 저장하시겠습니까?<br> 저장하지 않고 나가면 회의가 저장되지 않습니다.
                                 </p>
                             </form>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer text-center">
                             <button type="button" class="btn btn-primary" id="yes-button">예</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-button">아니요</button>
                         </div>
@@ -58,7 +60,15 @@
     <!--모달에서 아니오을 누르면 main화면으로 넘어가는 코드 구현-->
     // 모달 열고 닫는 함수
     const finishModal = document.getElementById('finishModal');
-    const openModal = () => finishModal.style.display = 'flex';
+    const openModal = () => {
+        finishModal.style.display = 'flex';
+        
+        const user_email = document.createElement('button');
+            user_email.className = 'btn btn-outline-primary me-1 mb-1';
+            user_email.textContent = '{{ user.email }}';
+
+        document.getElementById('attendent-email-buttons').appendChild(user_email);
+    }
 
     // "회의 종료" 버튼 클릭 시 모달 열기
     document.getElementById('end-button').addEventListener('click', () => {
@@ -150,14 +160,9 @@
 
     // 모달에서 "예" 버튼을 클릭하면 실행
     document.querySelector('#yes-button').addEventListener('click', async function() {
-        const yesbutton = document.querySelector('#yes-button')
-        yesbutton.setAttribute("disabled", "true")
-        yesbutton.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                                <span class="visually-hidden" role="status">Loading...</span>`
-
         const meetingNameInput = document.getElementById('title_input_element');
         const meetingName = meetingNameInput.value;
-
+        
         if (!meetingName) {
             // 입력 값이 비어있으면 테두리를 빨간색으로 설정
             meetingNameInput.style.border = '2px solid red';
@@ -168,11 +173,17 @@
             }, 300);
             // 함수 실행 중단
             return;
-
+            
         } else {
             // 값이 있으면 formData에 추가
             formData.append('meetingName', meetingName);
         }
+        
+        // 저장 로직 시작
+        const yesbutton = document.querySelector('#yes-button')
+        yesbutton.setAttribute("disabled", "true")
+        yesbutton.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                <span class="visually-hidden" role="status">Loading...</span>`
 
         // 참석자 이메일 수집
         const emailButtons1 = document.querySelectorAll('#attendent-email-buttons button');
