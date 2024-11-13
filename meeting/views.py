@@ -91,6 +91,8 @@ def detail_view(request, meeting_id):
         sorted_speakers = sorted(speakers_list)
         if "Unknown" in sorted_speakers:
             sorted_speakers.remove("Unknown")
+        elif "unknown" in sorted_speakers:
+            sorted_speakers.remove("unknown")
         elif "알 수 없음" in sorted_speakers:
             sorted_speakers.remove("알 수 없음")
 
@@ -109,6 +111,8 @@ def speaker_modify(request):
 
         if "Unknown" in selected_values:
             selected_values.remove("Unknown")
+        elif "unknown" in selected_values:
+            selected_values.remove("unknown")
         elif "알 수 없음" in selected_values:
             selected_values.remove("알 수 없음")
 
@@ -123,16 +127,20 @@ def speaker_modify(request):
         print(user_name_list)
         speakers_list = list({context['speaker'] for context in meeting.content['minutes']})
         sorted_speakers = sorted(speakers_list)
-        print(sorted_speakers) #해결
+        # print(sorted_speakers) #해결
         if "Unknown" in sorted_speakers:
             sorted_speakers.remove("Unknown")
+        
+        elif "unknown" in sorted_speakers:
+            sorted_speakers.remove("unknown")
+
         elif "알 수 없음" in sorted_speakers:
             sorted_speakers.remove("알 수 없음")
-        print(sorted_speakers) # 해결
+        # print(sorted_speakers) # 해결
 
         for context in meeting.content['minutes']:
             speaker = context["speaker"]
-            if speaker == "Unknown" or speaker == "알 수 없음" : continue
+            if speaker == "Unknown" or speaker == "알 수 없음" or speaker == "unknown": continue
 
             idx = sorted_speakers.index(speaker)
             print(idx, speaker)
