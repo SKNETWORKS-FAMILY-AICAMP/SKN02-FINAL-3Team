@@ -46,5 +46,17 @@
     cursor: pointer;
     padding: 10px;
   }
+  
+  #summary-area {
+    background-color: rgba(231, 241, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+  }
+  
+  #summary-area h2 {
+    font-size: 1.2rem
+  }
 
-
+  #summary-area h3 {
+    font-size: 1.2rem
+  }

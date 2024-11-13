@@ -11,7 +11,9 @@
       {% endfor %}
     </p>
     <p><strong>회의 요약</strong></p>
-    <p>{{ meeting.summary|safe }}</p>
+    <div id="summary-area">
+      {{ meeting.summary|safe }}
+    </div>
     <br>
     <div class="detailMeeting">
       <button type="button" id="open-modal" class="btn" data-bs-toggle="modal" data-bs-target="#contentDetail" data-meeting-id="{{ meeting.id }}">전문
