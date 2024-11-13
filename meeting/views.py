@@ -126,6 +126,10 @@ def speaker_modify(request):
         print(sorted_speakers) #해결
         if "Unknown" in sorted_speakers:
             sorted_speakers.remove("Unknown")
+        
+        if "unknown" in sorted_speakers:
+            sorted_speakers.remove("unknown")
+
         elif "알 수 없음" in sorted_speakers:
             sorted_speakers.remove("알 수 없음")
         print(sorted_speakers) # 해결
