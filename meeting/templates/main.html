@@ -41,7 +41,7 @@
 
     <div id="list-items">
       {% for meeting in meetings %}
-      <div class="list-item" onclick="toggleDetails1('{{ meeting.id }}')" {% if forloop.counter > 15 %} style="display: none;" {% endif %}>
+      <div class="list-item" id="item-{{meeting.id}}" onclick="toggleDetails1('{{ meeting.id }}')" {% if forloop.counter > 15 %} style="display: none;" {% endif %}>
         <span class="list-item-title">{{ meeting.title }}</span>
         <span class="list-item-info">{{ meeting.started_at|date:"Y-m-d H:i" }}<br>{{ meeting.host }}</span>
       </div>
@@ -50,7 +50,7 @@
 
   <!-- 더보기 버튼 -->
     <div class="d-grid">
-        <button id="load-more" class="btn btn-outline-dark">더보기</button>
+        <button id="load-more" class="btn">더보기</button>
     </div>
 
   </div>
@@ -77,27 +77,38 @@
 {% block script %}
 <script>
   let currentItem = null;
-
+  let beforeItem = null;
+  
   function toggleDetails1(meeting_id) {
     const meetingList = document.getElementById('meeting-list');
     const listContainer = document.getElementById('list-container');
     const detailsContainer = document.getElementById('details');
     const detailsContent = document.getElementById('details-content');
     const modalContainer = document.getElementById('contentModalHtml');
-
+    const current = document.getElementById(`item-${meeting_id}`)
+    if (currentItem != null) {
+      beforeItem = document.getElementById(`item-${currentItem}`);
+    }
+    
     if (currentItem === meeting_id) {
       // Hide the details if the same item is clicked again
       detailsContainer.classList.remove('open');
+      current.classList.remove('current');
       meetingList.classList.remove('split-view');
       currentItem = null;
     } else {
       // Fetch the meeting details from the server
       fetch(`/meeting_summary/${meeting_id}/`)
-        .then(response => response.text())
-        .then(html => {
-          // Show the details of the selected item
+      .then(response => response.text())
+      .then(html => {
+        if (currentItem != null) {
+          // split-view에서 다른 회의를 눌렀을 때를 대비
+            beforeItem.classList.remove('current');
+        }
+        // Show the details of the selected item
           detailsContent.innerHTML = html;
           detailsContainer.classList.add('open');
+          current.classList.add('current');
           meetingList.classList.add('split-view');
           currentItem = meeting_id;
         });

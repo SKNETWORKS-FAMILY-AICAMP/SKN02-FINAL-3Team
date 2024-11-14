@@ -75,8 +75,7 @@
   transition: background-color 0.3s ease;
 }
 .list-item:hover {
-  background-color: #0056b3;
-  color:white;
+  background-color: #e7f1ff;
 }
 .list-item-title {
   font-weight: bold;
@@ -103,7 +102,7 @@
   cursor: pointer;
   padding: 10px;
 }
-.create-meeting:hover {
+.create-meeting:hover, .list-item.current, #load-more:hover {
   background-color: #d0e4ffc6;
 }
 #meetingDetailModal {
@@ -111,4 +110,12 @@
 }
 #dropdownMenuButton {
   width:100px;
+}
+#load-more {
+  border-width: 2px;
+  border-color: #d0e4ffc6;
+  padding: 15px;
+}
+#load-more:hover {
+  border-color: white;
 }
