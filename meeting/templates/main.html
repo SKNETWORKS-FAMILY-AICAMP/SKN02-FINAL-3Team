@@ -238,10 +238,15 @@
     const listItemsContainer = document.getElementById('list-items');
     listItemsContainer.innerHTML = '';  // 기존 목록 초기화
 
+    if (meetings.length <= 15) {
+      $('#load-more').hide();
+    }
+
     if (meetings.length === 0) {
-      listItemsContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
+      listItemsContainer.innerHTML = '<p class="text-center"><b>검색 결과가 없습니다.<b></p>';
       return;
     }
+
 
     meetings.forEach(meeting => {
       const meetingDiv = document.createElement('div');
@@ -274,20 +279,27 @@
 
   $(document).ready(function() {
         var itemsToShow = 15;  // 한 번에 표시할 항목 수
+        var hiddenItems = $('.list-item:hidden');
+
+        if (hiddenItems.length <= 15) {
+          $('#load-more').hide();
+        } else {
+          $('#load-more').show();
+        }
 
         // 더보기 버튼 클릭 시 추가 항목 표시
         $('#load-more').click(function() {
             // 현재 숨겨진 항목 중에서 다음 itemsToShow 개수만큼 선택하여 보여줌
-            var hiddenItems = $('.list-item:hidden').slice(0, itemsToShow);
+            hiddenItems = $('.list-item:hidden');
+            var showItems = $('.list-item:hidden').slice(0, itemsToShow);
 
             // 선택된 숨겨진 항목이 있는지 확인
-            if (hiddenItems.length > 0) {
-                hiddenItems.slideDown();  // 숨겨진 항목을 부드럽게 표시
+            if (showItems.length > 0) {
+                showItems.slideDown();  // 숨겨진 항목을 부드럽게 표시
             }
 
-            // 더 이상 숨겨진 항목이 없으면 버튼 숨기기
-            if ($('.list-item:hidden').length === 0) {
-                $('#load-more').fadeOut();
+            if (hiddenItems.length <= 15) {
+              $('#load-more').fadeOut();
             }
         });
     });
