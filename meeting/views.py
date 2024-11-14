@@ -49,8 +49,7 @@ def meeting_summary(request, meeting_id):
     checkers_id = Participant.objects.filter(
         meeting_id=meeting_id, is_checker=True).values_list('user_id', flat=True)
     # 3. 모든 참가자의 User 객체 가져오기
-    users = User.objects.filter(id__in=participants).values_list(
-        'email', flat=True).distinct()  # 중복된 values_list 호출 제거
+    users = User.objects.filter(id__in=participants).values('first_name', 'last_name', 'email').distinct()  # 중복된 values_list 호출 제거
     # 4. Checker 역할인 참가자의 User 객체 가져오기
     checkerusers = User.objects.filter(id__in=checkers_id).values_list(
         'email', flat=True).distinct()  # 중복된 values_list 호출 제거
