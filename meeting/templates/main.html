@@ -85,7 +85,7 @@
     const detailsContainer = document.getElementById('details');
     const detailsContent = document.getElementById('details-content');
     const modalContainer = document.getElementById('contentModalHtml');
-    const current = document.getElementById(`item-${meeting_id}`)
+    const current = document.getElementById(`item-${meeting_id}`);
     if (currentItem != null) {
       beforeItem = document.getElementById(`item-${currentItem}`);
     }
@@ -123,9 +123,11 @@
   function closeToggle() {
     const meetingList = document.getElementById('meeting-list');
     const detailsContainer = document.getElementById('details');
+    const current = document.getElementById(`item-${currentItem}`);
     detailsContainer.classList.remove('open');
-      meetingList.classList.remove('split-view');
-      currentItem = null;
+    current.classList.remove('current');
+    meetingList.classList.remove('split-view');
+    currentItem = null;
   }
 
   // 수정
@@ -251,6 +253,7 @@
     meetings.forEach(meeting => {
       const meetingDiv = document.createElement('div');
       meetingDiv.classList.add('list-item');
+      meetingDiv.setAttribute('id', `item-${meeting.id}`)
       meetingDiv.setAttribute('onclick', `toggleDetails1('${meeting.id}')`);
       meetingDiv.innerHTML = `
         <span class="list-item-title">${meeting.title}</span>

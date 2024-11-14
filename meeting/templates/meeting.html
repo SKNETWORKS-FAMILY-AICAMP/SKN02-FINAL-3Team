@@ -4,12 +4,15 @@
     <span>{{ meeting.started_at|date:"Y-m-d H:i" }} 작성자 {{ meeting.host }}</span>
   </div>
   <div class="card-body">
-    <p>
-      <strong>참여자</strong><br />
+    <strong>참여자</strong><br />
+    <div class="d-flex my-2 flex-wrap">
       {% for user in users %}
-        {{ user }}<br />
+      <div class="mx-3">
+        <p class="m-0 p-0">{{ user.last_name }}{{ user.first_name }}</p>
+        <p style="font-size:0.8rem;">{{ user.email }}</p>
+      </div>
       {% endfor %}
-    </p>
+    </div>
     <p><strong>회의 요약</strong></p>
     <div id="summary-area">
       {{ meeting.summary|safe }}
