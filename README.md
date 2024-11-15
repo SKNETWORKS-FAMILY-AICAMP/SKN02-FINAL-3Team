@@ -3,11 +3,11 @@ SKN2기 최종 단위프로젝트
 
 #  팀 소개
 ## 👩‍🏫 팀 구성
-## ❄️: 추운자리  
+### ❄️: 추운자리  
 | 구선아 | 김진유 | 전상욱 | 이재원 | 
 |:--------------------:|:--------------------:|:--------------------:|:--------------------:|
-|  |  |  |  
-|  [@CAP_KOO](https://github.com/developer0826) | [@ACCUSE_KIM](https://github.com/Sesame-Oil)  | [@SUP_WOOK](https://github.com/wjstkddnr) | [@JAMMANBO_LEE](https://github.com/promethevs11) |
+| <img width="120px" src="https://github.com/user-attachments/assets/1fbb7b7d-3d94-493e-afde-19b100644b7a" /> | <img width="120px" src="https://github.com/user-attachments/assets/dcbfb785-b14a-4356-a05d-7d71c6783e1c" /> | <img width="120px" src="https://github.com/user-attachments/assets/c982accd-0c1b-47de-a627-d34fa70204c9" /> | <img width="120px" src="https://github.com/user-attachments/assets/8507bfca-7521-4d03-8e65-dda35ab7f362"/>
+|  [@SEONA_KOO](https://github.com/developer0826) | [@JINYU_KIM](https://github.com/Sesame-Oil)  | [@SANGWOOK_JEON](https://github.com/wjstkddnr) | [@JAEWON_LEE](https://github.com/promethevs11) |
 
 #  프로젝트
 
