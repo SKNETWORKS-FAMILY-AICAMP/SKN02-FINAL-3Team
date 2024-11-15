@@ -79,14 +79,14 @@ SKN2기 최종 단위프로젝트
 <img src="https://github.com/user-attachments/assets/23d70871-d5bc-4cb4-9c0c-06b441a33752"/>
 
 ## ☁️ 클라우드 아키텍쳐
-<img src="https://github.com/user-attachments/assets/d48430e2-9d72-4e63-942e-81132e6d7dc5"/>
+<img src="https://github.com/user-attachments/assets/1198a0b5-83db-4f91-8f6d-551d312ae1e2"/>
 
 ## 💻 DB 테이블 - ERD 및 DDL
 <img src="https://github.com/user-attachments/assets/f44a7a2b-13f8-4e3f-b996-86a21a5c2178"/>
 📚 주요 프로시저
 
 
-📚 수행결과
+## 📚 수행결과
 <img src="https://github.com/user-attachments/assets/6f358d2c-76a4-4026-ac3b-fa876335c1d7">
 <img src="https://github.com/user-attachments/assets/c30453d4-89c4-4897-9242-9b85a6f12881">
 <img src ="https://github.com/user-attachments/assets/3cd68e38-8456-4d45-bd38-37a94b49e2c1">
@@ -99,5 +99,8 @@ SKN2기 최종 단위프로젝트
 
 
 
-📚 한줄 회고
-
+## 📚 한줄 회고
+### ⭐SEONA_KOO : sLLM을 파인튜닝하고 서버에 올려보는 경험을 해보다니! MLOps에 대해 더 공부해보고 싶은 마음이 듭니다. 열정적인 조원들과 함께 프로젝트 할 수 있어서 감사한 시간들이었습니다.
+### JinYu_KIM :
+### SangWook_Jeon :
+### JaeWon_Lee :
